@@ -1,0 +1,8 @@
+co/com/accionese/dashboard/dto/DashboardDto.class
+co/com/accionese/dashboard/dto/PhotoDto.class
+co/com/accionese/dashboard/services/DashboardService.class
+co/com/accionese/dashboard/controllers/DashboardController.class
+co/com/accionese/dashboard/controllers/BaseRequest.class
+co/com/accionese/dashboard/services/Dashboard.class
+co/com/accionese/dashboard/api/Constants.class
+co/com/accionese/dashboard/DashboardApplication.class
