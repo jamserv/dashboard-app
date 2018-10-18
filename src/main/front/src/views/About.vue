@@ -93,6 +93,32 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12 info-panel">
+                        <br />
+                        <br />
+                        <p class="font-size-20 blue-grey-700">Evolutivo Inversion Marca por Tipo Soporte</p>
+                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
+                        <div>
+                            <apexcharts height="350" type="bar" :options="chartOptionsg3" :series="serieg3"></apexcharts>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 info-panel">
+                        <br />
+                        <br />
+                        <p class="font-size-20 blue-grey-700">Inversion por Ciudad</p>
+                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
+                        <div>
+                            <apexcharts height="350" type="bar" :options="chartOptionsgInversionCity" :series="chartOptionsgInversionCity.series"></apexcharts>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -219,7 +245,101 @@
                 }, {
                     name:'Paraderos',
                     data: [21, 32]
-                }]
+                }],
+
+                chartOptionsg3: {
+                    chart: {
+                        height: 350,
+                        type: 'bar',
+                        stacked: true,
+                        stackType: '100%'
+                    },
+                    responsive: [{
+                        breakpoint: 700,
+                        options: {
+                            legend: {
+                                position: 'bottom',
+                                offsetX: -10,
+                                offsetY: 0
+                            }
+                        }
+                    }],
+                    xaxis: {
+                        categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+
+                    legend: {
+                        position: 'right',
+                        verticalAlign: 'top',
+                        offsetX: 0,
+                        offsetY: 50
+                    },
+                },
+                serieg3: [
+                    {
+                        name:'Transmilenio',
+                        data: [44, 55, 41, 67, 22, 43, 21, 49,56,89,98,78,98,12,45,65,98,78,45,12,32,65,98,78,45,1,32,65,89,45]
+                    },
+                    {
+                        name:'Vallas',
+                        data: [15, 23, 20, 8, 13, 27, 33, 12,56,89,87,45,12,65,98,78,45,32,56,89,78,45,32,45,98,45,32,65,78,15]
+                    },
+                    {
+                        name:'Paraderos',
+                        data: [41, 17, 15, 15, 21, 14, 15, 13,45,89,45,12,65,78,45,32,64,79,15,35,65,89,78,15,45,32,65,98,78,15]
+                    }
+                    ],
+                chartOptionsgInversionCity: {
+                    chart: {
+                        height: 400,
+                        type: 'bar',
+                    },
+                    plotOptions: {
+                        bar: {
+                            //horizontal: false,
+                            endingShape: 'rounded',
+                            //columnWidth: '55%',
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        //colors: ['transparent']
+                    },
+                    series: [{
+                        name: '2015',
+                        data: [44, 55, 87, 56, 61, 95, 63, 60, 66, 15]
+                    }, {
+                        name: '2016',
+                        data: [76, 85, 100, 98, 12, 98, 91, 100, 94, 32]
+                    }],
+                    xaxis: {
+                        categories: ['Armenia', 'Barranquilla', 'Bogotá', 'Bucaramanga', 'Cali', 'Cartagena', 'Envigado', 'Manizales', 'Medellin', 'Pereira'],
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Costo en Miles'
+                        }
+                    },
+                    fill: {
+                        //opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return val + "%"
+                            }
+                        }
+                    }
+                }
+
+
 
 
             }
