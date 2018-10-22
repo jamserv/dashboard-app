@@ -176,10 +176,13 @@
 </template>
 <script>
     import VueApexCharts from 'vue-apexcharts'
+    import axios from 'axios'
+
+    axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
 
     export default {
         components: {
-            apexcharts: VueApexCharts,
+            'apexcharts': VueApexCharts
         },
         name: 'about',
         mounted() {
@@ -190,10 +193,18 @@
             this.buildByInvCity();
             this.buildInvSector();
             this.buildTopCampanas();
-            this.buildEvolutiveInvBran()
+            this.buildEvolutiveInvBran();
+            this.buildGeneralRequest();
         },
         data() {
             return {
+                color: '#1A237E',
+                color1: '#4527A0',
+                size: '45px',
+                margin: '2px',
+                radius: '2px',
+                loading: false,
+
                 sparkLine1: {
                     series: null
                 },
@@ -221,6 +232,17 @@
             }
         },
         methods: {
+            buildGeneralRequest(type, params) {
+                if (type === 'eim') {
+                    axios.get('/getEvolutiveInvMonths', {
+                        params: params
+                    }).then(function (response) {
+                        return response;
+                    }).catch(function (error) {
+                        return error;
+                    });
+                }
+            },
             buildSparkLine() {
                 this.sparkLine1 = {
                     chart: {
@@ -263,198 +285,201 @@
                 }
             },
             buildEvolutiveInvMonths() {
-                this.chartOptionsg1 = {
-                    chart: {
-                        type: 'area',
-                        toolbar: {
+                let self = this;
+                axios.get('/getEvolutiveInvMonths', {
+                    params: null
+                }).then(function (response) {
+                    var data = response.data;
+                    self.chartOptionsg1 = {
+                        chart: {
+                            type: 'area',
+                            toolbar: {
+                                show: true,
+                                tools: {
+                                    download: false,
+                                    selection: false,
+                                    zoom: false,
+                                    zoomin: false,
+                                    zoomout: false,
+                                    pan: false,
+                                    reset: false
+                                },
+                                autoSelected: 'zoom'
+                            },
+                        },
+                        grid: {
                             show: true,
-                            tools: {
-                                download: false,
-                                selection: false,
-                                zoom: false,
-                                zoomin: false,
-                                zoomout: false,
-                                pan: false,
-                                reset: false
-                            },
-                            autoSelected: 'zoom'
+                            borderColor: '#e0e3e8'
                         },
-                        animations: {
-                            enabled: true,
-                            easing: 'easeinout',
-                            speed: 300,
-                            animateGradually: {
-                                enabled: true,
-                                delay: 50
+                        dataLabels: {
+                            enabled: false,
+                            offsetX: 0
+                        },
+                        stroke: {
+                            curve: 'smooth',
+                            width: 3
+                        },
+                        xaxis: {
+                            //type: 'datetime',
+                            categories: data.categories
+                        },
+                        series: data.series,
+                        tooltip: {
+                            x: {
+                                format: 'dd/MM/yy HH:mm'
                             },
-                            dynamicAnimation: {
-                                enabled: true,
-                                speed: 150
-                            }
                         }
-                    },
-                    grid: {
-                        show: true,
-                        borderColor: '#e0e3e8'
-                    },
-                    dataLabels: {
-                        enabled: false,
-                        offsetX: 0
-                    },
-                    stroke: {
-                        curve: 'smooth',
-                        width: 3
-                    },
-                    xaxis: {
-                        type: 'datetime',
-                        categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00", "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00", "2018-09-19T06:30:00"],
-                    },
-                    series: [{
-                        name: 'Transmilenio',
-                        data: [31, 40, 28, -63, 42, 109, 100]
-                    }, {
-                        name: 'Vallas',
-                        data: [11, 32, 45, 32, 34, 52, 41]
-                    }, {
-                        name: 'Paraderos',
-                        data: [15, 56, 42, 23, 34, 56, 15]
                     }
-                    ],
-                    tooltip: {
-                        x: {
-                            format: 'dd/MM/yy HH:mm'
-                        },
-                    }
-                }
+                }).catch(function (error) {
+                    return error;
+                });
             },
             buildInvSupportType() {
-                this.chartOptionsg2 = {
-                    chart: {
-                        type: 'bar',
-                        stacked: true,
-                        stackType: '100%'
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: true
-                        }
-                    },
-                    dataLabels: {
-                        enabled: true,
-                        style: {
-                            fontSize: '12px',
-                            colors: ['#fff']
-                        }
-                    },
-                    stroke: {
-                        show: true,
-                        width: 1,
-                        colors: ['#fff']
-                    },
-                    xaxis: {
-                        categories: [2015, 2016]
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function (val) {
-                                return val + "%"
+                let self = this;
+                axios.get('/getInvBySupportType', {
+                    params: null
+                }).then(function (response) {
+                    let data = response.data;
+                    self.chartOptionsg2 = {
+                        chart: {
+                            type: 'bar',
+                            stacked: true,
+                            stackType: '100%'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true
                             }
-                        }
-                    },
-                    series: [{
-                        name: 'Transmilenio',
-                        data: [13, 98]
-                    }, {
-                        name: 'Vallas',
-                        data: [44, 75]
-                    }, {
-                        name: 'Paraderos',
-                        data: [21, 32]
-                    }]
-                }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontSize: '12px',
+                                colors: ['#fff']
+                            }
+                        },
+                        stroke: {
+                            show: true,
+                            width: 1,
+                            colors: ['#fff']
+                        },
+                        xaxis: {
+                            categories: data.numericCategories
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return val.toFixed(2) + "%"
+                                }
+                            }
+                        },
+                        series: data.series
+                    }
+                }).catch(function (error) {
+                    return error;
+                });
             },
             buildEvolutiveInvBranSupport() {
-                this.chartOptionsg3 = {
-                    chart: {
-                        height: 350,
-                        type: 'bar',
-                        stacked: true,
-                        stackType: '100%'
-                    },
-                    responsive: [{
-                        breakpoint: 700,
-                        options: {
-                            legend: {
-                                position: 'right',
-                                offsetX: -10,
-                                offsetY: 0
+                let self = this;
+                axios.get('/getEvolutiveInvertionBranBySupportTypeService', {
+                    params: null
+                }).then(function (response) {
+                    let data = response.data;
+                    self.chartOptionsg3 = {
+                        chart: {
+                            height: 450,
+                            type: 'bar',
+                            stacked: true,
+                            stackType: '100%'
+                        },
+                        responsive: [{
+                            breakpoint: 700,
+                            options: {
+                                legend: {
+                                    position: 'right',
+                                    offsetX: -10,
+                                    offsetY: 0
+                                }
+                            }
+                        }],
+
+                        xaxis: {
+                            categories: data.categories
+                        },
+                        series: data.series,
+                        fill: {
+                            opacity: 1
+                        },
+                        legend: {
+                            position: 'bottom',
+                            horizontalAlign: 'center'
+                        },
+                        tooltip: {
+                            theme: 'dark',
+                            x: {
+                                show: true
+                            },
+                            y: {
+                                title: {
+                                    formatter: function() {
+                                        return ''
+                                    }
+                                }
                             }
                         }
-                    }],
-
-                    xaxis: {
-                        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-                    },
-                    series: [
-                        {
-                            name: 'Transmilenio',
-                            data: [44, 55, 41, 67, 22, 43, 21, 49, 56, 89, 98, 78, 98, 12, 45, 65, 98, 78, 45, 12, 32, 65, 98, 78, 45, 1, 32, 65, 89, 45]
-                        },
-                        {
-                            name: 'Vallas',
-                            data: [15, 23, 20, 8, 13, 27, 33, 12, 56, 89, 87, 45, 12, 65, 98, 78, 45, 32, 56, 89, 78, 45, 32, 45, 98, 45, 32, 65, 78, 15]
-                        },
-                        {
-                            name: 'Paraderos',
-                            data: [41, 17, 15, 15, 21, 14, 15, 13, 45, 89, 45, 12, 65, 78, 45, 32, 64, 79, 15, 35, 65, 89, 78, 15, 45, 32, 65, 98, 78, 15]
-                        }
-                    ],
-                    fill: {
-                        opacity: 1
-                    },
-
-                    legend: {
-                        position: 'bottom',
-                        horizontalAlign: 'center'
                     }
-                }
+                }).catch(function (error) {
+                    return error;
+                });
             },
             buildByInvCity() {
-                this.chartOptionsgInversionCity = {
-                    chart: {
-                        height: 400,
-                        type: 'bar',
-                    },
-                    plotOptions: {
-                        bar: {
-                            endingShape: 'rounded'
+                let self = this;
+                axios.get('/getInvestmentByCity', {
+                    params: null
+                }).then(function (response) {
+                    let data = response.data;
+                    self.chartOptionsgInversionCity = {
+                        chart: {
+                            height: 400,
+                            type: 'bar',
                         },
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 2,
-                    },
-                    series: [{
-                        name: '2015',
-                        data: [44, 55, 87, 56, 61, 95, 63, 60, 66, 15]
-                    }, {
-                        name: '2016',
-                        data: [76, 85, 100, 98, 12, 98, 91, 100, 94, 32]
-                    }],
-                    xaxis: {
-                        categories: ['Armenia', 'Barranquilla', 'Bogotá', 'Bucaramanga', 'Cali', 'Cartagena', 'Envigado', 'Manizales', 'Medellin', 'Pereira'],
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function (val) {
-                                return val + "%"
+                        plotOptions: {
+                            bar: {
+                                endingShape: 'rounded'
+                            },
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            show: true,
+                            width: 2,
+                        },
+                        /*
+                        series: [{
+                            name: '2015',
+                            data: [44, 55, 87, 56, 61, 95, 63, 60, 66, 15]
+                        }, {
+                            name: '2016',
+                            data: [76, 85, 100, 98, 12, 98, 91, 100, 94, 32]
+                        }],
+                        */
+                        series: data.series,
+                        xaxis: {
+                            //categories: ['Armenia', 'Barranquilla', 'Bogotá', 'Bucaramanga', 'Cali', 'Cartagena', 'Envigado', 'Manizales', 'Medellin', 'Pereira'],
+                            categories: data.categories
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return val + "%"
+                                }
                             }
                         }
                     }
-                }
+                }).catch(function (error) {
+                    return error;
+                });
             },
             buildInvSector() {
                 this.chartOptionsgInversionSector = {

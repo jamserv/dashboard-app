@@ -1,14 +1,13 @@
 package co.com.accionese.dashboard.services;
 
-import co.com.accionese.dashboard.dto.DashboardDto;
-import java.util.List;
-import java.util.Map;
+import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
+import org.springframework.util.MultiValueMap;
 
 /**
  *
  * @author janez
  */
-public interface Dashboard {
+public interface Dashboard {  
 
-    public List<DashboardDto> getDashboard(Map<String, Object> params);
+    public BaseResponse genericQuery(MultiValueMap<String, String> params);
 }

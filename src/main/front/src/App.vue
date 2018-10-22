@@ -142,10 +142,10 @@
                             <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#"
                                aria-expanded="false"
                                data-animation="scale-up" role="button">
-              <span class="avatar avatar-online">
-                  <img src="global/portraits/5.jpg" alt="...">
-                <i></i>
-              </span>
+                                  <span class="avatar avatar-online">
+                                      <img src="global/portraits/5.jpg" alt="...">
+                                    <i></i>
+                                  </span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li role="presentation">

@@ -12,15 +12,3 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
-
-
-/*
-function startApp() {
-    return new Vue({
-        el: '#app',
-        render: h => h(App),
-        router
-    });
-}
-startApp();
-*/

@@ -1,11 +1,15 @@
 package co.com.accionese.dashboard.controllers;
 
 import co.com.accionese.dashboard.api.Constants;
-import co.com.accionese.dashboard.dto.DashboardDto;
-import co.com.accionese.dashboard.services.DashboardService;
-import java.util.List;
-import java.util.Map;
+import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
+import co.com.accionese.dashboard.services.EvolutiveInvestmentInMonthsService;
+import co.com.accionese.dashboard.services.EvolutiveInvestmentBranBySupportTypeService;
+import co.com.accionese.dashboard.services.InvestmentByCity;
+import co.com.accionese.dashboard.services.InvestmentBySupportTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,17 +18,48 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author janez
  */
-@RestController(value = Constants.DASHBOARD_URI)
+@RestController
+@CrossOrigin
 public class DashboardController {
 
     @Autowired
-    DashboardService dashboardService;
+    EvolutiveInvestmentInMonthsService evolutiveInversionMonths;
 
-    @GetMapping("/dashboard")
+    @Autowired
+    InvestmentBySupportTypeService invertionBySupportTypeService;
+
+    @Autowired
+    EvolutiveInvestmentBranBySupportTypeService evolutiveInvertionBranBySupportTypeService;
+    
+    @Autowired
+    InvestmentByCity investmentByCity;
+
+    @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvMonths")
     @ResponseBody
-    List<DashboardDto> getDashboard() {
-        Map<String, Object> params = null;
-        return dashboardService.getDashboard(params);
+    BaseResponse getEvolutiveInvMonths() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return evolutiveInversionMonths.genericQuery(params);
+    }
+
+    @GetMapping(Constants.DASHBOARD_URI + "/getInvBySupportType")
+    @ResponseBody
+    BaseResponse getInvBySupportType() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return invertionBySupportTypeService.genericQuery(params);
+    }
+
+    @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvertionBranBySupportTypeService")
+    @ResponseBody
+    BaseResponse getEvolutiveInvestmentBranBySupportTypeService() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return evolutiveInvertionBranBySupportTypeService.genericQuery(params);
+    }
+    
+    @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByCity")
+    @ResponseBody
+    BaseResponse getInvestmentByCity() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return investmentByCity.genericQuery(params);
     }
 
 }
