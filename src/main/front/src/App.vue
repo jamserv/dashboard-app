@@ -17,7 +17,7 @@
                 <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
                     <!-- Navbar Toolbar -->
                     <ul class="nav navbar-toolbar">
-                        <li class="hidden-float" id="toggleMenubar">
+                        <li class="hidden-float" id="toggleMenubar" @click="checkMenuStatus">
                             <a data-toggle="menubar" href="#" role="button">
                                 <i class="icon hamburger hamburger-arrow-left">
                                     <span class="sr-only">Toggle menubar</span>
@@ -191,7 +191,7 @@
                             <li class="site-menu-item has-sub">
                                 <a href="#/">
                                     <i class="site-menu-icon wb-home" aria-hidden="true"></i>
-                                    <span class="site-menu-title">Home</span>
+                                    <span class="site-menu-title">Inicio</span>
                                     <div class="site-menu-badge">
                                         <span class="badge badge-success">3</span>
                                     </div>
@@ -200,7 +200,7 @@
                             <li class="site-menu-item has-sub">
                                 <a href="#/about">
                                     <i class="site-menu-icon wb-pie-chart" aria-hidden="true"></i>
-                                    <span class="site-menu-title">Chart</span>
+                                    <span class="site-menu-title">Dashboard</span>
                                     <span class="site-menu-arrow"></span>
                                 </a>
                                 <ul class="site-menu-sub">
@@ -223,21 +223,35 @@
                             </li>
 
                         </ul>
-                        <div class="site-menubar-section">
-                            <h5>
-                                Milestone
-                                <span class="pull-right">30%</span>
-                            </h5>
-                            <div class="progress progress-xs">
-                                <div class="progress-bar active" style="width: 30%;" role="progressbar"></div>
+                        <div class="site-menubar-section" v-if="hideMenu">
+
+                            <h5>Año</h5>
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option>-</option>
+                                    <option>2016</option>
+                                    <option>2017</option>
+                                </select>
                             </div>
-                            <h5>
-                                Release
-                                <span class="pull-right">60%</span>
-                            </h5>
-                            <div class="progress progress-xs">
-                                <div class="progress-bar progress-bar-warning" style="width: 60%;"
-                                     role="progressbar"></div>
+
+                            <h5>Mes</h5>
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option>-</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+
+                            <h5>Marca</h5>
+                            <div class="form-group">
+                                <div class="input-search">
+                                    <button type="submit" class="input-search-btn"><i class="icon wb-search"
+                                                                                      aria-hidden="true"></i></button>
+                                    <input class="form-control" name="" placeholder="Search..." type="text">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -249,3 +263,24 @@
     </div>
 
 </template>
+<script>
+    export default {
+        name: 'app',
+        mounted() {
+        },
+        data() {
+            return {
+                hideMenu: true
+            }
+        },
+        methods: {
+            checkMenuStatus() {
+                if(this.hideMenu) {
+                    this.hideMenu = false;
+                } else {
+                    this.hideMenu = true;
+                }
+            }
+        }
+    }
+</script>

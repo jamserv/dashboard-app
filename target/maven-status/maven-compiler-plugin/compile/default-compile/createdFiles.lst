@@ -1,4 +1,5 @@
 co/com/accionese/dashboard/dto/DashboardDto.class
+co/com/accionese/dashboard/services/EvolutiveInvestmentSetor.class
 co/com/accionese/dashboard/dto/PhotoDto.class
 co/com/accionese/dashboard/controllers/DashboardController.class
 co/com/accionese/dashboard/controllers/BaseRequest.class

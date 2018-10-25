@@ -15,6 +15,7 @@
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/Dashboard.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentBySupportTypeService.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/EvolutiveInvestmentBranBySupportTypeService.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/EvolutiveInvestmentSetor.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/apexcharts/CategoryDatetime.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/controllers/DashboardController.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/DashboardDto.java

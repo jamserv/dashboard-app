@@ -14,7 +14,7 @@
                                     <i class="text-danger icon wb-triangle-up font-size-20">
                                     </i>
                                     <span class="font-size-40 font-weight-100">399</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+45% From previous month</p>
+                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
                                     <apexcharts height="80" type="area" :options="sparkLine1"
                                                 :series="sparkLine1.series"></apexcharts>
                                 </div>
@@ -32,7 +32,7 @@
                                     <i class="text-success icon wb-triangle-down font-size-20">
                                     </i>
                                     <span class="font-size-40 font-weight-100">$18,628</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+45% From previous month</p>
+                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
                                     <apexcharts height="80" type="area" :options="sparkLine1"
                                                 :series="sparkLine1.series"></apexcharts>
                                 </div>
@@ -50,7 +50,7 @@
                                     <i class="text-danger icon wb-triangle-up font-size-20">
                                     </i>
                                     <span class="font-size-40 font-weight-100">23,456</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+25% From previous month</p>
+                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
                                     <apexcharts height="80" type="area" :options="sparkLine1"
                                                 :series="sparkLine1.series"></apexcharts>
                                 </div>
@@ -68,7 +68,7 @@
                                     <i class="text-danger icon wb-triangle-up font-size-20">
                                     </i>
                                     <span class="font-size-40 font-weight-100">4,367</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+25% From previous month</p>
+                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
                                     <apexcharts height="80" type="area" :options="sparkLine1"
                                                 :series="sparkLine1.series"></apexcharts>
                                 </div>
@@ -84,10 +84,10 @@
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion Mensual</p>
                         <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
-                        <div>
+                        <divrea>
                             <apexcharts height="350" type="area" :options="chartOptionsg1"
                                         :series="chartOptionsg1.series"></apexcharts>
-                        </div>
+                        </divrea>
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion Marca por Tipo Soporte</p>
                         <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
-                            <apexcharts height="350" type="bar" :options="chartOptionsg3"
+                            <apexcharts height="500" type="bar" :options="chartOptionsg3"
                                         :series="chartOptionsg3.series"></apexcharts>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                         <p class="font-size-20 blue-grey-700">Inversion por Ciudad</p>
                         <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
-                            <apexcharts height="350" type="bar" :options="chartOptionsgInversionCity"
+                            <apexcharts height="450" type="bar" :options="chartOptionsgInversionCity"
                                         :series="chartOptionsgInversionCity.series"></apexcharts>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion por Sector</p>
                         <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
-                            <apexcharts height="350" type="bar" :options="chartOptionsgInversionSector"
+                            <apexcharts height="600" type="bar" :options="chartOptionsgInversionSector"
                                         :series="chartOptionsgInversionSector.series"></apexcharts>
                         </div>
                     </div>
@@ -366,6 +366,17 @@
                         xaxis: {
                             categories: data.numericCategories
                         },
+                        yaxis: {
+                            labels: {
+                                style: {
+                                    color: '#8e8da4',
+                                },
+                                offsetX: 0,
+                                formatter: function (val) {
+                                    return val.toFixed(0);
+                                },
+                            }
+                        },
                         tooltip: {
                             y: {
                                 formatter: function (val) {
@@ -414,6 +425,17 @@
                             position: 'bottom',
                             horizontalAlign: 'center'
                         },
+                        yaxis: {
+                            labels: {
+                                style: {
+                                    color: '#8e8da4',
+                                },
+                                offsetX: 0,
+                                formatter: function (val) {
+                                    return val.toFixed(0) + "%";
+                                },
+                            }
+                        },
                         tooltip: {
                             theme: 'dark',
                             x: {
@@ -421,7 +443,7 @@
                             },
                             y: {
                                 title: {
-                                    formatter: function() {
+                                    formatter: function () {
                                         return ''
                                     }
                                 }
@@ -442,6 +464,8 @@
                         chart: {
                             height: 400,
                             type: 'bar',
+                            stacked: true,
+                            //stackType: '100%'
                         },
                         plotOptions: {
                             bar: {
@@ -455,24 +479,25 @@
                             show: true,
                             width: 2,
                         },
-                        /*
-                        series: [{
-                            name: '2015',
-                            data: [44, 55, 87, 56, 61, 95, 63, 60, 66, 15]
-                        }, {
-                            name: '2016',
-                            data: [76, 85, 100, 98, 12, 98, 91, 100, 94, 32]
-                        }],
-                        */
+                        yaxis: {
+                            labels: {
+                                style: {
+                                    color: '#8e8da4',
+                                },
+                                offsetX: 0,
+                                formatter: function (val) {
+                                    return val.toFixed(0);
+                                },
+                            }
+                        },
                         series: data.series,
                         xaxis: {
-                            //categories: ['Armenia', 'Barranquilla', 'Bogotá', 'Bucaramanga', 'Cali', 'Cartagena', 'Envigado', 'Manizales', 'Medellin', 'Pereira'],
                             categories: data.categories
                         },
                         tooltip: {
                             y: {
                                 formatter: function (val) {
-                                    return val + "%"
+                                    return val.toFixed(2) + "%";
                                 }
                             }
                         }
@@ -482,45 +507,61 @@
                 });
             },
             buildInvSector() {
-                this.chartOptionsgInversionSector = {
-                    chart: {
-                        height: 350,
-                        type: 'bar',
-                        stacked: true,
-                        stackType: '100%'
-                    },
-                    responsive: [{
-                        breakpoint: 700,
-                        options: {
-                            legend: {
-                                position: 'bottom',
-                                offsetX: -10,
-                                offsetY: 0
+                let self = this;
+                axios.get('/getEvolutiveInvestmentSetor', {
+                    params: null
+                }).then(function (response) {
+                    let data = response.data;
+                    self.chartOptionsgInversionSector = {
+                        chart: {
+                            height: 450,
+                            type: 'bar',
+                            stacked: true,
+                            stackType: '100%'
+                        },
+                        responsive: [{
+                            breakpoint: 700,
+                            options: {
+                                legend: {
+                                    position: 'bottom',
+                                    offsetX: -10,
+                                    offsetY: 0
+                                }
+                            }
+                        }],
+                        series: data.series,
+                        xaxis: {
+                            categories: data.categories
+                        },
+                        fill: {
+                            opacity: 1
+                        },
+                        legend: {
+                            position: 'bottom',
+                            horizontalAlign: 'center'
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return '$' + val.toFixed(2)
+                                }
+                            }
+                        },
+                        yaxis: {
+                            labels: {
+                                style: {
+                                    color: '#8e8da4',
+                                },
+                                offsetX: 0,
+                                formatter: function (val) {
+                                    return val.toFixed(0) + "%";
+                                },
                             }
                         }
-                    }],
-                    series: [{
-                        name: 'PRODUCT A',
-                        data: [44, 55, 41, 67, 22, 43, 21, 49]
-                    }, {
-                        name: 'PRODUCT B',
-                        data: [13, 23, 20, 8, 13, 27, 33, 12]
-                    }, {
-                        name: 'PRODUCT C',
-                        data: [11, 17, 15, 15, 21, 14, 15, 13]
-                    }],
-                    xaxis: {
-                        categories: ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4'],
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-
-                    legend: {
-                        position: 'bottom',
-                        horizontalAlign: 'center'
                     }
-                }
+                }).catch(function (error) {
+                    return error;
+                });
             },
             buildTopCampanas() {
                 this.chartOptionsTopCampanas = {

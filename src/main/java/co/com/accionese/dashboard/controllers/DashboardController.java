@@ -4,6 +4,7 @@ import co.com.accionese.dashboard.api.Constants;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.services.EvolutiveInvestmentInMonthsService;
 import co.com.accionese.dashboard.services.EvolutiveInvestmentBranBySupportTypeService;
+import co.com.accionese.dashboard.services.EvolutiveInvestmentSetor;
 import co.com.accionese.dashboard.services.InvestmentByCity;
 import co.com.accionese.dashboard.services.InvestmentBySupportTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,12 @@ public class DashboardController {
 
     @Autowired
     EvolutiveInvestmentBranBySupportTypeService evolutiveInvertionBranBySupportTypeService;
-    
+
     @Autowired
     InvestmentByCity investmentByCity;
+    
+    @Autowired
+    EvolutiveInvestmentSetor evolutiveInvestmentSetor;
 
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvMonths")
     @ResponseBody
@@ -54,12 +58,19 @@ public class DashboardController {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         return evolutiveInvertionBranBySupportTypeService.genericQuery(params);
     }
-    
+
     @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByCity")
     @ResponseBody
     BaseResponse getInvestmentByCity() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         return investmentByCity.genericQuery(params);
+    }
+
+    @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvestmentSetor")
+    @ResponseBody
+    BaseResponse getEvolutiveInvestmentSetor() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return evolutiveInvestmentSetor.genericQuery(params);
     }
 
 }
