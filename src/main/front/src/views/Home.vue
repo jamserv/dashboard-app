@@ -150,7 +150,7 @@
                         <p class="font-size-20 blue-grey-700">TOP Campañas</p>
                         <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
-                            <apexcharts height="350" type="line" :options="chartOptionsTopCampanas"
+                            <apexcharts height="450" type="line" :options="chartOptionsTopCampanas"
                                         :series="chartOptionsTopCampanas.series"></apexcharts>
                         </div>
                     </div>
@@ -564,154 +564,92 @@
                 });
             },
             buildTopCampanas() {
-                this.chartOptionsTopCampanas = {
-                    chart: {
-                        type: 'line',
-                        height: 350
-                    },
-                    plotOptions: {
-                        line: {
-                            curve: 'smooth',
-                        }
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    series: [
-                        {
-                            name: "Desktops  0 ",
-                            data: [57, 83, 89, 84, 41, 92, 72, 6, 57, 70]
+                let self = this;
+                axios.get('/getInvestmentByTopCampaign', {
+                    params: null
+                }).then(function (response) {
+                    let data = response.data;
+                    self.chartOptionsTopCampanas = {
+                        chart: {
+                            type: 'line'
                         },
-                        {
-                            name: "Desktops  1 ",
-                            data: [59, 92, 90, 80, 58, 28, 23, 18, 87, 86]
+                        dataLabels: {
+                            enabled: false
                         },
-                        {
-                            name: "Desktops  2 ",
-                            data: [8, 70, 96, 81, 35, 54, 70, 8, 65, 21]
+                        series: data.series,
+                        markers: {
+                            size: 0,
+                            style: 'full',
                         },
-                        {
-                            name: "Desktops  3 ",
-                            data: [25, 50, 27, 49, 43, 73, 71, 32, 21, 8]
-                        },
-                        {
-                            name: "Desktops  4 ",
-                            data: [49, 52, 5, 93, 67, 4, 6, 93, 71, 14]
-                        },
-                        {
-                            name: "Desktops  5 ",
-                            data: [87, 9, 53, 99, 34, 66, 57, 81, 57, 19]
-                        },
-                        {
-                            name: "Desktops  6 ",
-                            data: [17, 90, 49, 45, 48, 57, 31, 350, 85, 25]
-                        },
-                        {
-                            name: "Desktops  7 ",
-                            data: [19, 44, 14, 80, 44, 21, 99, 47, 92, 57]
-                        },
-                        {
-                            name: "Desktops  8 ",
-                            data: [73, 57, 99, 6, 8, 46, 15, 82, 89, 45]
-                        },
-                        {
-                            name: "Desktops  9 ",
-                            data: [85, 83, 8, 22, 23, 65, 92, 88, 56, 80]
-                        },
-                    ],
-                    markers: {
-                        size: 0,
-                        style: 'full',
-                    },
-                    yaxis: {
-
-                        labels: {
-                            style: {
-                                color: '#8e8da4',
-                            },
-                            offsetX: 0,
-                            formatter: function (val) {
-                                return val.toFixed(2);
-                            },
-                        },
-                        axisBorder: {
-                            show: false,
-                        },
-
-                        axisTicks: {
-                            show: false
-                        }
-                    },
-                    stroke: {
-                        curve: 'smooth',
-                        show: true,
-                        width: 3
-                    },
-                    xaxis: {
-                        //type: 'datetime',
-                        categories: ['2015 Ene', '2015 Mar', '2015 Abr', 'Bucaramanga', 'Cali', 'Cartagena', 'Envigado', 'Manizales', 'Medellin', 'Pereira'],
-                        //min: 0,
-                        //max: 100,
-                        labels: {
-                            formatter: function (val) {
-                                return val
+                        yaxis: {
+                            labels: {
+                                formatter: function (val) {
+                                    return val.toFixed(2);
+                                },
                             }
+                        },
+                        stroke: {
+                            curve: 'smooth',
+                            show: true,
+                            width: 3
+                        },
+                        xaxis: {
+                            categories: data.categories,
+                            labels: {
+                                formatter: function (val) {
+                                    return val
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            horizontalAlign: 'center'
                         }
-                    },
-                    tooltip: {
-                        shared: true
-                    },
-                    legend: {
-                        position: 'bottom',
-                        horizontalAlign: 'center'
                     }
-                }
+                }).catch(function (error) {
+                    return error;
+                });
             },
             buildEvolutiveInvBran() {
-                this.chartOptionsEvolutivoInvMarca = {
-                    chart: {
-                        height: 350,
-                        type: 'bar',
-                        stacked: true,
-                        stackType: '100%'
-                    },
-                    responsive: [{
-                        breakpoint: 700,
-                        options: {
-                            legend: {
-                                position: 'right',
-                                offsetX: -10,
-                                offsetY: 0
+                let self = this;
+                axios.get('/getEvolutiveBrandAnnualInvestment', {
+                    params: null
+                }).then(function (response) {
+                    let data = response.data;
+                    self.chartOptionsEvolutivoInvMarca = {
+                        chart: {
+                            height: 350,
+                            type: 'bar',
+                            stacked: true,
+                            stackType: '100%'
+                        },
+                        responsive: [{
+                            breakpoint: 700,
+                            options: {
+                                legend: {
+                                    position: 'right',
+                                    offsetX: -10,
+                                    offsetY: 0
+                                }
                             }
-                        }
-                    }],
+                        }],
 
-                    xaxis: {
-                        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-                    },
-                    series: [
-                        {
-                            name: 'Transmilenio',
-                            data: [44, 55, 41, 67, 22, 43, 21, 49, 56, 89, 98, 78, 98, 12, 45, 65, 98, 78, 45, 12, 32, 65, 98, 78, 45, 1, 32, 65, 89, 45]
+                        xaxis: {
+                            categories: data.categories,
                         },
-                        {
-                            name: 'Vallas',
-                            data: [15, 23, 20, 8, 13, 27, 33, 12, 56, 89, 87, 45, 12, 65, 98, 78, 45, 32, 56, 89, 78, 45, 32, 45, 98, 45, 32, 65, 78, 15]
+                        series: data.series,
+                        fill: {
+                            opacity: 1
                         },
-                        {
-                            name: 'Paraderos',
-                            data: [41, 17, 15, 15, 21, 14, 15, 13, 45, 89, 45, 12, 65, 78, 45, 32, 64, 79, 15, 35, 65, 89, 78, 15, 45, 32, 65, 98, 78, 15]
-                        }
-                    ],
-                    fill: {
-                        opacity: 1
-                    },
 
-                    legend: {
-                        position: 'bottom',
-                        horizontalAlign: 'center'
+                        legend: {
+                            position: 'bottom',
+                            horizontalAlign: 'center'
+                        }
                     }
-                }
+                }).catch(function (error) {
+                    return error;
+                });
             }
 
         }

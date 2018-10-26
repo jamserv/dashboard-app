@@ -22,7 +22,7 @@ import org.springframework.util.MultiValueMap;
  * @author janez
  */
 @Service
-public class InvestmentByCity implements Dashboard {
+public class InvestmentByCity implements BaseRequest {
 
     @Autowired
     PentahoService pentahoService;

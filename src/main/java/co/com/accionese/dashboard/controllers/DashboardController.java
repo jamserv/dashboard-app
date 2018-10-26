@@ -2,11 +2,13 @@ package co.com.accionese.dashboard.controllers;
 
 import co.com.accionese.dashboard.api.Constants;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
+import co.com.accionese.dashboard.services.EvolutiveBrandAnnualInvestmentService;
 import co.com.accionese.dashboard.services.EvolutiveInvestmentInMonthsService;
 import co.com.accionese.dashboard.services.EvolutiveInvestmentBranBySupportTypeService;
-import co.com.accionese.dashboard.services.EvolutiveInvestmentSetor;
+import co.com.accionese.dashboard.services.EvolutiveInvestmentSector;
 import co.com.accionese.dashboard.services.InvestmentByCity;
 import co.com.accionese.dashboard.services.InvestmentBySupportTypeService;
+import co.com.accionese.dashboard.services.InvestmentByTopCampaign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -34,9 +36,15 @@ public class DashboardController {
 
     @Autowired
     InvestmentByCity investmentByCity;
+
+    @Autowired
+    EvolutiveInvestmentSector evolutiveInvestmentSetor;
+
+    @Autowired
+    InvestmentByTopCampaign investmentByTopCampaign;
     
     @Autowired
-    EvolutiveInvestmentSetor evolutiveInvestmentSetor;
+    EvolutiveBrandAnnualInvestmentService evolutiveBrandAnnualInvestmentService;
 
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvMonths")
     @ResponseBody
@@ -71,6 +79,20 @@ public class DashboardController {
     BaseResponse getEvolutiveInvestmentSetor() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         return evolutiveInvestmentSetor.genericQuery(params);
+    }
+
+    @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByTopCampaign")
+    @ResponseBody
+    BaseResponse getInvestmentByTopCampaign() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return investmentByTopCampaign.genericQuery(params);
+    }
+    
+    @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveBrandAnnualInvestment")
+    @ResponseBody
+    BaseResponse getEvolutiveBrandAnnualInvestment() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        return evolutiveBrandAnnualInvestmentService.genericQuery(params);
     }
 
 }

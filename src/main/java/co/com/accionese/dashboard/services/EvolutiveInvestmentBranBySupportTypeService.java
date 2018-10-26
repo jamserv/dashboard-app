@@ -21,7 +21,7 @@ import org.springframework.util.MultiValueMap;
  * @author janez
  */
 @Service
-public class EvolutiveInvestmentBranBySupportTypeService implements Dashboard {
+public class EvolutiveInvestmentBranBySupportTypeService implements BaseRequest {
 
     @Autowired
     PentahoService pentahoService;

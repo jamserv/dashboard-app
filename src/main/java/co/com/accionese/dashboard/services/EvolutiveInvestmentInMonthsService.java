@@ -5,26 +5,11 @@ import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Category;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
 import co.com.accionese.dashboard.dto.apexcharts.SerieSimple;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -38,7 +23,7 @@ import org.springframework.util.MultiValueMap;
  * @author janez
  */
 @Service
-public class EvolutiveInvestmentInMonthsService implements Dashboard {
+public class EvolutiveInvestmentInMonthsService implements BaseRequest {
 
     @Autowired
     PentahoService pentahoService;
@@ -139,56 +124,6 @@ public class EvolutiveInvestmentInMonthsService implements Dashboard {
 
         return series;
 
-    }
-
-    void solrAproximations() {
-        BaseResponse baseResponse = new BaseResponse();
-        List<String> categories = new ArrayList<>();
-        List<SerieSimple> serieSimples = new ArrayList<>();
-
-        String urlString = "http://localhost:8983/solr/dashboard-core/";
-        SolrClient solr = new HttpSolrClient.Builder(urlString).build();
-
-        SolrQuery query = new SolrQuery();
-        //query.setRows(0);
-        query.set("fl", "Tipo,FechaInicial,CostoEnMiles");
-        //query.setFields("Tipo", "FechaInicial", "CostoEnMiles");
-        query.set("q", "FechaInicial:[2015-01-01T00:00:00Z TO NOW]");
-        query.setSort("FechaInicial", SolrQuery.ORDER.asc);
-
-        try {
-            QueryResponse response = solr.query(query);
-            SolrDocumentList results = response.getResults();
-            for (SolrDocument doc : results) {
-                categories.add(parseDate(doc.get("FechaInicial").toString()));
-                serieSimples.add(new SerieSimple(doc.get("Tipo").toString(), Double.parseDouble(doc.get("CostoEnMiles").toString())));
-
-            }
-        } catch (SolrServerException ex) {
-            Logger.getLogger(DashboardService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(DashboardService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(EvolutiveInvestmentInMonthsService.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            List<Serie> compactSeries = buildSeries(serieSimples);
-            baseResponse.setCategories(categories);
-            baseResponse.setSeries(compactSeries);
-        }
-        //return baseResponse;
-    }
-
-    private String parseDate(String currentDt) throws java.text.ParseException {
-        DateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-        java.util.Date date1 = (java.util.Date) formatter.parse(currentDt);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date1);
-
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
-
-        java.util.Date date = cal.getTime();
-
-        return formatter2.format(date) + "T00:00:00Z";
     }
 
 }
