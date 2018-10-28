@@ -163,7 +163,7 @@
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion por Marca</p>
                         <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
-                            <apexcharts height="350" type="bar" :options="chartOptionsEvolutivoInvMarca"
+                            <apexcharts height="600" type="bar" :options="chartOptionsEvolutivoInvMarca"
                                         :series="chartOptionsEvolutivoInvMarca.series"></apexcharts>
                         </div>
                     </div>
@@ -320,7 +320,9 @@
                             width: 3
                         },
                         xaxis: {
-                            //type: 'datetime',
+                            labels: {
+                                show: false
+                            },
                             categories: data.categories
                         },
                         series: data.series,
@@ -351,19 +353,15 @@
                                 horizontal: true
                             }
                         },
-                        dataLabels: {
-                            enabled: true,
-                            style: {
-                                fontSize: '12px',
-                                colors: ['#fff']
-                            }
-                        },
                         stroke: {
                             show: true,
                             width: 1,
                             colors: ['#fff']
                         },
                         xaxis: {
+                            labels: {
+                                show: false
+                            },
                             categories: data.numericCategories
                         },
                         yaxis: {
@@ -380,7 +378,7 @@
                         tooltip: {
                             y: {
                                 formatter: function (val) {
-                                    return val.toFixed(2) + "%"
+                                    return '$' + val.toFixed(2);
                                 }
                             }
                         },
@@ -415,6 +413,9 @@
                         }],
 
                         xaxis: {
+                            labels: {
+                                show: false
+                            },
                             categories: data.categories
                         },
                         series: data.series,
@@ -432,7 +433,7 @@
                                 },
                                 offsetX: 0,
                                 formatter: function (val) {
-                                    return val.toFixed(0) + "%";
+                                    return '$' + val.toFixed(2);
                                 },
                             }
                         },
@@ -462,22 +463,32 @@
                     let data = response.data;
                     self.chartOptionsgInversionCity = {
                         chart: {
-                            height: 400,
                             type: 'bar',
                             stacked: true,
-                            //stackType: '100%'
+                            stackType: '100%'
                         },
                         plotOptions: {
                             bar: {
-                                endingShape: 'rounded'
-                            },
+                                horizontal: true
+                            }
                         },
                         dataLabels: {
-                            enabled: false
+                            enabled: true,
+                            style: {
+                                fontSize: '12px',
+                                colors: ['#fff']
+                            }
                         },
                         stroke: {
                             show: true,
-                            width: 2,
+                            width: 1,
+                            colors: ['#fff']
+                        },
+                        xaxis: {
+                            labels: {
+                                show: false
+                            },
+                            categories: data.numericCategories
                         },
                         yaxis: {
                             labels: {
@@ -490,17 +501,14 @@
                                 },
                             }
                         },
-                        series: data.series,
-                        xaxis: {
-                            categories: data.categories
-                        },
                         tooltip: {
                             y: {
                                 formatter: function (val) {
-                                    return val.toFixed(2) + "%";
+                                    return '$' + val.toFixed(2);
                                 }
                             }
-                        }
+                        },
+                        series: data.series
                     }
                 }).catch(function (error) {
                     return error;
@@ -508,7 +516,7 @@
             },
             buildInvSector() {
                 let self = this;
-                axios.get('/getEvolutiveInvestmentSetor', {
+                axios.get('/getEvolutiveInvestmentSector', {
                     params: null
                 }).then(function (response) {
                     let data = response.data;
@@ -531,6 +539,9 @@
                         }],
                         series: data.series,
                         xaxis: {
+                            labels: {
+                                show: false
+                            },
                             categories: data.categories
                         },
                         fill: {
@@ -596,9 +607,7 @@
                         xaxis: {
                             categories: data.categories,
                             labels: {
-                                formatter: function (val) {
-                                    return val
-                                }
+                                show: false
                             }
                         },
                         legend: {
@@ -635,6 +644,9 @@
                         }],
 
                         xaxis: {
+                            labels: {
+                                show: false
+                            },
                             categories: data.categories,
                         },
                         series: data.series,

@@ -9,17 +9,17 @@ import java.util.List;
 public class Serie {
 
     private String name;
-    private List<Double> data;
+    private List<Long> data;
 
     public Serie() {
     }
 
-    public Serie(String name, List<Double> data) {
+    public Serie(String name, List<Long> data) {
         this.name = name;
         this.data = data;
     }
 
-    public List<Double> getData() {
+    public List<Long> getData() {
         return data;
     }
 

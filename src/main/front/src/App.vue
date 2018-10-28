@@ -190,13 +190,14 @@
                             <li class="site-menu-category">General</li>
                             <li class="site-menu-item has-sub">
                                 <a href="#/">
-                                    <i class="site-menu-icon wb-home" aria-hidden="true"></i>
-                                    <span class="site-menu-title">Inicio</span>
+                                    <i class="site-menu-icon wb-pie-chart" aria-hidden="true"></i>
+                                    <span class="site-menu-title">Dashboard</span>
                                     <div class="site-menu-badge">
-                                        <span class="badge badge-success">3</span>
+                                        <span class="badge badge-success">11</span>
                                     </div>
                                 </a>
                             </li>
+                            <!--
                             <li class="site-menu-item has-sub">
                                 <a href="#/about">
                                     <i class="site-menu-icon wb-pie-chart" aria-hidden="true"></i>
@@ -221,6 +222,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            -->
 
                         </ul>
                         <div class="site-menubar-section" v-if="hideMenu">

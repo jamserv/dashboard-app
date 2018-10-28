@@ -7,17 +7,17 @@ package co.com.accionese.dashboard.dto.apexcharts;
 public class SerieSimple {
     
     private String name;
-    private Double data;
+    private Long data;
 
     public SerieSimple() {
     }
 
-    public SerieSimple(String name, Double data) {
+    public SerieSimple(String name, Long data) {
         this.name = name;
         this.data = data;
     }
 
-    public Double getData() {
+    public Long getData() {
         return data;
     }
 

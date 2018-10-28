@@ -9,9 +9,9 @@ import co.com.accionese.dashboard.services.EvolutiveInvestmentSector;
 import co.com.accionese.dashboard.services.InvestmentByCity;
 import co.com.accionese.dashboard.services.InvestmentBySupportTypeService;
 import co.com.accionese.dashboard.services.InvestmentByTopCampaign;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,7 +38,7 @@ public class DashboardController {
     InvestmentByCity investmentByCity;
 
     @Autowired
-    EvolutiveInvestmentSector evolutiveInvestmentSetor;
+    EvolutiveInvestmentSector evolutiveInvestmentSector;
 
     @Autowired
     InvestmentByTopCampaign investmentByTopCampaign;
@@ -49,49 +49,49 @@ public class DashboardController {
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvMonths")
     @ResponseBody
     BaseResponse getEvolutiveInvMonths() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         return evolutiveInversionMonths.genericQuery(params);
     }
 
     @GetMapping(Constants.DASHBOARD_URI + "/getInvBySupportType")
     @ResponseBody
     BaseResponse getInvBySupportType() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         return invertionBySupportTypeService.genericQuery(params);
     }
 
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvertionBranBySupportTypeService")
     @ResponseBody
     BaseResponse getEvolutiveInvestmentBranBySupportTypeService() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         return evolutiveInvertionBranBySupportTypeService.genericQuery(params);
     }
 
     @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByCity")
     @ResponseBody
     BaseResponse getInvestmentByCity() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         return investmentByCity.genericQuery(params);
     }
 
-    @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvestmentSetor")
+    @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvestmentSector")
     @ResponseBody
     BaseResponse getEvolutiveInvestmentSetor() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        return evolutiveInvestmentSetor.genericQuery(params);
+        Map<String, String> params = new LinkedHashMap<>();
+        return evolutiveInvestmentSector.genericQuery(params);
     }
 
     @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByTopCampaign")
     @ResponseBody
     BaseResponse getInvestmentByTopCampaign() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         return investmentByTopCampaign.genericQuery(params);
     }
     
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveBrandAnnualInvestment")
     @ResponseBody
     BaseResponse getEvolutiveBrandAnnualInvestment() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        Map<String, String> params = new LinkedHashMap<>();
         return evolutiveBrandAnnualInvestmentService.genericQuery(params);
     }
 
