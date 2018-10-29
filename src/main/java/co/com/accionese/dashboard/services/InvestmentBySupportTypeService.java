@@ -1,6 +1,5 @@
 package co.com.accionese.dashboard.services;
 
-import co.com.accionese.dashboard.services.api.BaseRequest;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
@@ -27,13 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import co.com.accionese.dashboard.api.IBaseRequest;
 
 /**
  *
  * @author janez
  */
 @Service
-public class InvestmentBySupportTypeService implements BaseRequest {
+public class InvestmentBySupportTypeService implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
@@ -78,22 +78,13 @@ public class InvestmentBySupportTypeService implements BaseRequest {
     }
 
     private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
-//        String response = pentahoService.genericPentahoRequest(params);
-
-        //List<SerieSimple> serieSimples = new ArrayList<>();
-        List<Integer> categories = new ArrayList<>();
-        //Map<String, Double> values = new LinkedHashMap<>();
+        
         Map<String, List<Long>> values = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = getDashboard(null);
-        for (EvolutiveInvestmentDto content : list) {
-            String category = content.getMonth() + " " + content.getYear();
-            //categories.put(Integer.parseInt(content.getType()), new Category(category));
-
-            //String key = content.getType() + "" + content.getYear();
-            //serieSimples.add(new SerieSimple(key, Double.parseDouble(content.getCost())));
+        for (EvolutiveInvestmentDto content : list) {            
             String key = content.getType();
-            //values.put(key, Double.parseDouble(content.getCost()));
+            
             if (values.containsKey(key)) {
                 List<Long> l = values.get(key);
                 long value = Long.parseLong(content.getCost());
@@ -105,17 +96,7 @@ public class InvestmentBySupportTypeService implements BaseRequest {
                 values.put(key, v);
             }
         }
-
-//        JSONParser jsonparser = new JSONParser();
-//        JSONObject object = (JSONObject) jsonparser.parse(response);
-//        JSONArray resultset = (JSONArray) object.get("resultset");
-//        for (Object o : resultset) {
-//            JSONArray remoteStr = (JSONArray) o;
-//
-//            String key = remoteStr.get(0) + "" + remoteStr.get(1);
-//            serieSimples.add(new SerieSimple(key, Double.parseDouble(remoteStr.get(2).toString())));
-//        }
-        //List<Serie> r = buildSeries(serieSimples);
+        
         List<Serie> r = buildSerieWithMap(values);
 
         baseResponse.setNumericCategories(Arrays.asList(2015, 2016, 2017));
@@ -133,49 +114,6 @@ public class InvestmentBySupportTypeService implements BaseRequest {
         }
         return series;
     }
-
-//    private List<Serie> buildSeries(List<SerieSimple> serieSimples) {
-//        List<Double> setVallas = new ArrayList<>();
-//        List<Double> setParaderos = new ArrayList<>();
-//        List<Double> setTransmilenio = new ArrayList<>();
-//
-//        double vallastotal = 0.00;
-//        double paraderostotal = 0.00;
-//        double transmileniototal = 0.00;
-//
-//        for (SerieSimple simple : serieSimples) {
-//            if (simple.getName().startsWith("Vallas")) {
-//                vallastotal += simple.getData();
-//            } else if (simple.getName().startsWith("Paraderos")) {
-//                paraderostotal += simple.getData();
-//            } else if (simple.getName().startsWith("Transmilenio")) {
-//                transmileniototal += simple.getData();
-//            }
-//
-//        }
-//
-//        for (SerieSimple simple : serieSimples) {
-//            if (simple.getName().startsWith("Vallas")) {
-//                double vallasperc = ((simple.getData() * 100) / vallastotal);
-//                setVallas.add(vallasperc);
-//            } else if (simple.getName().startsWith("Paraderos")) {
-//                double paraderosperc = ((simple.getData() * 100) / paraderostotal);
-//                setParaderos.add(paraderosperc);
-//            } else if (simple.getName().startsWith("Transmilenio")) {
-//                double transmilenioperc = ((simple.getData() * 100) / transmileniototal);
-//                setTransmilenio.add(transmilenioperc);
-//            }
-//        }
-//
-//        List<Serie> series = new ArrayList<>();
-//
-//        series.add(new Serie("Vallas", setVallas));
-//        series.add(new Serie("Paraderos", setParaderos));
-//        series.add(new Serie("Transmilenio", setTransmilenio));
-//
-//        return series;
-//
-//    }
 
     public List<EvolutiveInvestmentDto> getDashboard(Map<String, Object> params) {
         try {

@@ -3,7 +3,6 @@ package co.com.accionese.dashboard.services;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
-import co.com.accionese.dashboard.services.api.MultiRequest;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,13 +25,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import co.com.accionese.dashboard.api.IMultiRequest;
 
 /**
  *
  * @author janez
  */
 @Service
-public class TotalInversmentService implements MultiRequest {
+public class TotalInversmentService implements IMultiRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
@@ -49,12 +49,11 @@ public class TotalInversmentService implements MultiRequest {
             buildQuery(params);
             buildBaseResponse(baseResponse, params);
             baseResponse.setHttpStatus(HttpStatus.OK);
-            //return baseResponse;
             return null;
         } catch (Exception ex) {
             ex.printStackTrace();
             baseResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return null;            
+            return null;
         }
     }
 

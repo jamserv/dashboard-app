@@ -1,6 +1,5 @@
 package co.com.accionese.dashboard.services;
 
-import co.com.accionese.dashboard.services.api.BaseRequest;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
@@ -26,9 +25,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import co.com.accionese.dashboard.api.IBaseRequest;
 
 @Service
-public class EvolutiveInvestmentSector implements BaseRequest {
+public class EvolutiveInvestmentSector implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
@@ -69,33 +69,10 @@ public class EvolutiveInvestmentSector implements BaseRequest {
         params.put("paramsearchBox", "");
     }
 
-    private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
-        //String response = pentahoService.genericPentahoRequest(params);
+    private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {        
         List<String> categories = new ArrayList<>();
         Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
 
-//        JSONParser jsonparser = new JSONParser();
-//        JSONObject object = (JSONObject) jsonparser.parse(response);
-//        JSONArray resultset = (JSONArray) object.get("resultset");
-//        for (Object o : resultset) {
-//            JSONArray remoteStr = (JSONArray) o;
-//
-//            buildCategories(categories, remoteStr.get(2).toString().substring(0, 3) + " " + remoteStr.get(1).toString());
-//
-//            String key = remoteStr.get(0).toString();
-//
-//            if (seriesMap.containsKey(key)) {
-//                List<Long> l = seriesMap.get(key);
-//                long value = Long.parseLong(remoteStr.get(3).toString());
-//                l.add(value);
-//                seriesMap.put(key, l);
-//            } else {
-//                List<Long> v = new ArrayList<>();
-//                v.add(Long.parseLong(remoteStr.get(3).toString()));
-//                seriesMap.put(key, v);
-//            }
-//
-//        }
         List<EvolutiveInvestmentDto> list = getDashboard(null);
         for (EvolutiveInvestmentDto content : list) {
             buildCategories(categories, content.getMonth().substring(0, 3) + " " + content.getYear());
@@ -104,8 +81,7 @@ public class EvolutiveInvestmentSector implements BaseRequest {
             Long cost = Long.parseLong(content.getCost());
 
             if (seriesMap.containsKey(key)) {
-                List<Long> l = seriesMap.get(key);
-                //long value = Long.parseLong(content.getCost());
+                List<Long> l = seriesMap.get(key);                
                 l.add(cost);
                 seriesMap.put(key, l);
             } else {

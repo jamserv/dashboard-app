@@ -1,6 +1,5 @@
 package co.com.accionese.dashboard.services;
 
-import co.com.accionese.dashboard.services.api.BaseRequest;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
@@ -26,13 +25,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import co.com.accionese.dashboard.api.IBaseRequest;
 
 /**
  *
  * @author janez
  */
 @Service
-public class EvolutiveBrandAnnualInvestmentService implements BaseRequest {
+public class EvolutiveBrandAnnualInvestmentService implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;

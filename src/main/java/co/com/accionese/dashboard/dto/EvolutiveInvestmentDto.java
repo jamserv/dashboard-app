@@ -16,19 +16,6 @@ public class EvolutiveInvestmentDto implements Serializable {
     private String city;
     private String sector;
 
-    public EvolutiveInvestmentDto() {
-    }
-
-    public EvolutiveInvestmentDto(String brand, String year, String month, String cost, String type, String city, String sector) {
-        this.brand = brand;
-        this.year = year;
-        this.month = month;
-        this.cost = cost;
-        this.type = type;
-        this.city = city;
-        this.sector = sector;
-    }
-
     public String getBrand() {
         return brand;
     }

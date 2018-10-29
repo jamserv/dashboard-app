@@ -1,5 +1,4 @@
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentByTopCampaign.java
-/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/PentahoService.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/apexcharts/Category.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/Constants.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/EvolutiveBrandAnnualInvestmentService.java
@@ -7,14 +6,14 @@
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/EvolutiveInvestmentInMonthsService.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/DashboardApplication.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/apexcharts/BaseResponse.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/IBaseRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/apexcharts/SerieSimple.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentByCity.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/apexcharts/Serie.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/IMultiRequest.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/BaseRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/EvolutiveInvestmentDto.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentBySupportTypeService.java
-/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/controllers/api/BaseRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/EvolutiveInvestmentBranBySupportTypeService.java
-/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/api/BaseRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/TotalInversmentService.java
-/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/api/MultiRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/controllers/DashboardController.java
