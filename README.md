@@ -11,6 +11,8 @@ Download image https://hub.docker.com/_/solr/
 **NOTES**
 * DELETE ALL DOCs
 
+```xml
 <delete>
-<query>*:*</query>
+    <query>*:*</query>
 </delete>
+```
