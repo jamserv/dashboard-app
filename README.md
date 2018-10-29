@@ -19,11 +19,11 @@ Download image https://hub.docker.com/_/solr/
 
 **Operation Types**
 
-INV_ANUAL_TYPE --> year
-EV_INV_BRAND --> brand * year
-EVO_INV_BRAND_SUPPORT_TYPE --> brand * year
-INV_BY_SECTOR --> year
-INV_BY_CITY --> year
-INV_SUPPORT_TYPE --> year
-TOTAL_INV --> year
-TOP_CAMPANAS --> brand * yea
+* INV_ANUAL_TYPE --> year
+* EV_INV_BRAND --> brand * year
+* EVO_INV_BRAND_SUPPORT_TYPE --> brand * year
+* INV_BY_SECTOR --> year
+* INV_BY_CITY --> year
+* INV_SUPPORT_TYPE --> year
+* TOTAL_INV --> year
+* TOP_CAMPANAS --> brand * yea
