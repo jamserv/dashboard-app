@@ -1,4 +1,4 @@
-# dashboard-app
+# Dashboard App - Accionese
 
 Download image https://hub.docker.com/_/solr/
 
