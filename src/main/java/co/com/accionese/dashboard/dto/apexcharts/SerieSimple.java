@@ -5,7 +5,7 @@ package co.com.accionese.dashboard.dto.apexcharts;
  * @author janez
  */
 public class SerieSimple {
-    
+
     private String name;
     private Long data;
 
@@ -24,7 +24,5 @@ public class SerieSimple {
     public String getName() {
         return name;
     }
-    
-    
-    
+
 }

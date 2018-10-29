@@ -32,13 +32,13 @@ import co.com.accionese.dashboard.api.IBaseRequest;
  * @author janez
  */
 @Service
-public class EvolutiveInvestmentBranBySupportTypeService implements IBaseRequest {
+public class InvestmentBranBySupportType implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
 
     @Autowired
-    public EvolutiveInvestmentBranBySupportTypeService(RestTemplateBuilder builder) {
+    public InvestmentBranBySupportType(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 

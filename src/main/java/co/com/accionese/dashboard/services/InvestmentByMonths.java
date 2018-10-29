@@ -5,7 +5,6 @@ import co.com.accionese.dashboard.dto.apexcharts.Serie;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,13 +32,13 @@ import co.com.accionese.dashboard.api.IBaseRequest;
  * @author janez
  */
 @Service
-public class InvestmentBySupportTypeService implements IBaseRequest {
+public class InvestmentByMonths implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
 
     @Autowired
-    public InvestmentBySupportTypeService(RestTemplateBuilder builder) {
+    public InvestmentByMonths(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 
@@ -49,6 +48,7 @@ public class InvestmentBySupportTypeService implements IBaseRequest {
         try {
             buildQuery(params);
             buildBaseResponse(baseResponse, params);
+
             baseResponse.setHttpStatus(HttpStatus.OK);
             return baseResponse;
         } catch (Exception ex) {
@@ -61,30 +61,30 @@ public class InvestmentBySupportTypeService implements IBaseRequest {
     private void buildQuery(Map<String, String> params) throws Exception {
         params.put("paramBrandParameter", "%");
         params.put("paramBrandParameterArray", "%");
-        params.put("paramMonthParameter", "%");
-        params.put("paramMonthParameterArray", "%");
-        params.put("paramCityParameter", "%");
         params.put("paramYearParameter", "%");
         params.put("paramYearParameterArray", "%");
+        params.put("paramCityParameter", "%");
 
         params.put("path", "/public/Sipex2/Dashboard/Dashboard.cda");
-        params.put("dataAccessId", "TypeInvestmentQuery");
+        params.put("dataAccessId", "AnnualinvestmentQuery");
 
         params.put("outputIndexId", "1");
         params.put("pageSize", "0");
         params.put("pageStart", "0");
-        params.put("sortBy", "");
+        params.put("sortBy", "0");
         params.put("paramsearchBox", "");
     }
 
     private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
-        
+
+        List<String> categories = new ArrayList<>();
+
         Map<String, List<Long>> values = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = getDashboard(null);
-        for (EvolutiveInvestmentDto content : list) {            
+        for (EvolutiveInvestmentDto content : list) {
             String key = content.getType();
-            
+
             if (values.containsKey(key)) {
                 List<Long> l = values.get(key);
                 long value = Long.parseLong(content.getCost());
@@ -95,12 +95,18 @@ public class InvestmentBySupportTypeService implements IBaseRequest {
                 v.add(Long.parseLong(content.getCost()));
                 values.put(key, v);
             }
+            buildCategories(categories, content.getMonth().substring(0, 3) + " " + content.getYear());
         }
-        
-        List<Serie> r = buildSerieWithMap(values);
 
-        baseResponse.setNumericCategories(Arrays.asList(2015, 2016, 2017));
-        baseResponse.setSeries(r);
+        List<Serie> series = buildSerieWithMap(values);
+        baseResponse.setCategories(categories);
+        baseResponse.setSeries(series);
+    }
+
+    private void buildCategories(List<String> categories, String year) {
+        if (!categories.contains(year)) {
+            categories.add(year);
+        }
     }
 
     private List<Serie> buildSerieWithMap(Map<String, List<Long>> values) {
@@ -108,9 +114,9 @@ public class InvestmentBySupportTypeService implements IBaseRequest {
         for (Map.Entry<String, List<Long>> entry : values.entrySet()) {
             String key = entry.getKey();
             List<Long> value = entry.getValue();
-            
+
             series.add(new Serie(key, value));
-            
+
         }
         return series;
     }
@@ -119,8 +125,7 @@ public class InvestmentBySupportTypeService implements IBaseRequest {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(solrHost);
-            String query = "operationType:INV_SUPPORT_TYPE&rows=500&start=0";
-            builder = builder.path("/solr/dashboard-core/select?q=" + query);
+            builder = builder.path("/solr/dashboard-core/select?q=operationType:INV_ANUAL_TYPE&rows=8000&start=1");
             if (params != null) {
                 for (Map.Entry<String, Object> entry : params.entrySet()) {
                     builder.queryParam(entry.getKey(), URLEncoder.encode(entry.getValue().toString(), "UTF-8"));

@@ -1,8 +1,8 @@
 package co.com.accionese.dashboard.services;
 
+import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
-import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,46 +25,49 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import co.com.accionese.dashboard.api.IBaseRequest;
+import co.com.accionese.dashboard.api.IMultiRequest;
 
 /**
  *
  * @author janez
  */
 @Service
-public class EvolutiveBrandAnnualInvestmentService implements IBaseRequest {
+public class TotalInversment implements IMultiRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
 
     @Autowired
-    public EvolutiveBrandAnnualInvestmentService(RestTemplateBuilder builder) {
+    public TotalInversment(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 
     @Override
-    public BaseResponse genericQuery(Map<String, String> params) {
+    public List<BaseResponse> genericQuery(Map<String, String> params) {
         BaseResponse baseResponse = new BaseResponse();
         try {
             buildQuery(params);
             buildBaseResponse(baseResponse, params);
             baseResponse.setHttpStatus(HttpStatus.OK);
-            return baseResponse;
+            return null;
         } catch (Exception ex) {
             ex.printStackTrace();
             baseResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return baseResponse;
+            return null;
         }
     }
 
     private void buildQuery(Map<String, String> params) throws Exception {
-        params.put("paramCityParameter", "%");
         params.put("paramTypeParameter", "%");
         params.put("paramBrandParameter", "%");
         params.put("paramBrandParameterArray", "%");
+        params.put("paramMonthParameter", "%");
+        params.put("paramMonthParameterArray", "%");
+        params.put("paramYearParameter", "%");
+        params.put("paramYearParameterArray", "%");
 
         params.put("path", "/public/Sipex2/Dashboard/Dashboard.cda");
-        params.put("dataAccessId", "BrandMonthInvestmentQuery");
+        params.put("dataAccessId", "CityInvestmentQuery");
 
         params.put("outputIndexId", "1");
         params.put("pageSize", "0");
@@ -73,80 +76,57 @@ public class EvolutiveBrandAnnualInvestmentService implements IBaseRequest {
         params.put("paramsearchBox", "");
     }
 
-    private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {        
-        List<String> categories = new ArrayList<>();
+    private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
+        List<Integer> categories = new ArrayList<>();
 
-        Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
-        Map<String, String> seriesMapFix = new LinkedHashMap<>();
+        Map<String, List<Long>> values = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = getDashboard(null);
         for (EvolutiveInvestmentDto content : list) {
-            String cat = content.getMonth().substring(0, 3) + " " + content.getYear();
-            buildCategories(categories, cat);
+            String key = content.getCity();
 
-            String key = content.getBrand().replaceAll(" ", "");
-
-            if (seriesMap.containsKey(key)) {
-                List<Long> l = seriesMap.get(key);
+            if (values.containsKey(key)) {
+                List<Long> l = values.get(key);
                 long value = Long.parseLong(content.getCost());
                 l.add(value);
-                seriesMap.put(key, l);
+                values.put(key, l);
             } else {
                 List<Long> v = new ArrayList<>();
                 v.add(Long.parseLong(content.getCost()));
-                seriesMap.put(key, v);
+                values.put(key, v);
             }
-            seriesMapFix.put(key.replaceAll(" ", "") + " " + cat, key);
+            buildCategories(categories, Integer.parseInt(content.getYear()));
         }
 
-        fixNullableIndex(categories, seriesMapFix, seriesMap);
-
-        List<Serie> series = buildSeriesWithMap(seriesMap);
-        baseResponse.setCategories(categories);
+        List<Serie> series = buildSerieWithMap(values);
+        baseResponse.setNumericCategories(categories);
         baseResponse.setSeries(series);
     }
 
-    private void buildCategories(List<String> categories, String city) {
-        if (!categories.contains(city)) {
-            categories.add(city);
-        }
-    }
-
-    private void fixNullableIndex(List<String> categories, Map<String, String> seriesMapFix, Map<String, List<Long>> seriesMap) {
-        int counter = 0;
-        for (String category : categories) {
-            for (Map.Entry<String, List<Long>> entry : seriesMap.entrySet()) {
-                String key = entry.getKey();
-                List<Long> value = entry.getValue();
-                String brand = key.replaceAll(" ", "");
-
-                if (!seriesMapFix.containsKey(brand + " " + category)) {
-                    value.add(counter, 0L);
-                    seriesMap.put(key, value);
-                }
-            }
-            counter++;
-        }
-    }
-
-    private List<Serie> buildSeriesWithMap(Map<String, List<Long>> seriesMap) {
+    private List<Serie> buildSerieWithMap(Map<String, List<Long>> values) {
         List<Serie> series = new ArrayList<>();
-
-        for (Map.Entry<String, List<Long>> entry : seriesMap.entrySet()) {
+        for (Map.Entry<String, List<Long>> entry : values.entrySet()) {
             String key = entry.getKey();
             List<Long> value = entry.getValue();
 
             series.add(new Serie(key, value));
-        }
 
+        }
         return series;
+    }
+
+    private void buildCategories(List<Integer> categories, Integer year) {
+        if (!categories.contains(year)) {
+            categories.add(year);
+        }
     }
 
     public List<EvolutiveInvestmentDto> getDashboard(Map<String, Object> params) {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(solrHost);
-            builder = builder.path("/solr/dashboard-core/select?q=operationType:EV_INV_BRAND&rows=8000&start=1");
+            String query = "operationType:INV_BY_CITY&rows=500&start=0";
+            builder = builder.path("/solr/dashboard-core/select?q=" + query);
             if (params != null) {
                 for (Map.Entry<String, Object> entry : params.entrySet()) {
                     builder.queryParam(entry.getKey(), URLEncoder.encode(entry.getValue().toString(), "UTF-8"));
@@ -178,10 +158,10 @@ public class EvolutiveBrandAnnualInvestmentService implements IBaseRequest {
             JSONObject objectMapper = (JSONObject) doc;
 
             EvolutiveInvestmentDto investmentSectorDto = new EvolutiveInvestmentDto();
-            investmentSectorDto.setBrand(fieldValidator(objectMapper, "brand"));
+
             investmentSectorDto.setCost(fieldValidator(objectMapper, "cost"));
-            investmentSectorDto.setMonth(fieldValidator(objectMapper, "month"));
             investmentSectorDto.setYear(fieldValidator(objectMapper, "year"));
+            investmentSectorDto.setCity(fieldValidator(objectMapper, "city"));
 
             list.add(investmentSectorDto);
         }

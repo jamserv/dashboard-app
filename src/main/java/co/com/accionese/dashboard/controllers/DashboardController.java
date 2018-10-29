@@ -2,12 +2,12 @@ package co.com.accionese.dashboard.controllers;
 
 import co.com.accionese.dashboard.api.Constants;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
-import co.com.accionese.dashboard.services.EvolutiveBrandAnnualInvestmentService;
-import co.com.accionese.dashboard.services.EvolutiveInvestmentInMonthsService;
-import co.com.accionese.dashboard.services.EvolutiveInvestmentBranBySupportTypeService;
-import co.com.accionese.dashboard.services.EvolutiveInvestmentSector;
+import co.com.accionese.dashboard.services.InvestmentAnualByBrand;
+import co.com.accionese.dashboard.services.InvestmentByMonths;
+import co.com.accionese.dashboard.services.InvestmentBranBySupportType;
+import co.com.accionese.dashboard.services.InvestmentBySector;
 import co.com.accionese.dashboard.services.InvestmentByCity;
-import co.com.accionese.dashboard.services.InvestmentBySupportTypeService;
+import co.com.accionese.dashboard.services.InvestmentBySupportType;
 import co.com.accionese.dashboard.services.InvestmentByTopCampaign;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,25 +26,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class DashboardController {
 
     @Autowired
-    EvolutiveInvestmentInMonthsService evolutiveInversionMonths;
+    InvestmentByMonths evolutiveInversionMonths;
 
     @Autowired
-    InvestmentBySupportTypeService invertionBySupportTypeService;
+    InvestmentBySupportType invertionBySupportTypeService;
 
     @Autowired
-    EvolutiveInvestmentBranBySupportTypeService evolutiveInvertionBranBySupportTypeService;
+    InvestmentBranBySupportType evolutiveInvertionBranBySupportTypeService;
 
     @Autowired
     InvestmentByCity investmentByCity;
 
     @Autowired
-    EvolutiveInvestmentSector evolutiveInvestmentSector;
+    InvestmentBySector evolutiveInvestmentSector;
 
     @Autowired
     InvestmentByTopCampaign investmentByTopCampaign;
     
     @Autowired
-    EvolutiveBrandAnnualInvestmentService evolutiveBrandAnnualInvestmentService;
+    InvestmentAnualByBrand evolutiveBrandAnnualInvestmentService;
 
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvMonths")
     @ResponseBody

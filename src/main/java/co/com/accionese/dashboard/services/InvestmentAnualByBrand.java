@@ -27,14 +27,18 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import co.com.accionese.dashboard.api.IBaseRequest;
 
+/**
+ *
+ * @author janez
+ */
 @Service
-public class EvolutiveInvestmentSector implements IBaseRequest {
+public class InvestmentAnualByBrand implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
 
     @Autowired
-    public EvolutiveInvestmentSector(RestTemplateBuilder builder) {
+    public InvestmentAnualByBrand(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 
@@ -54,13 +58,13 @@ public class EvolutiveInvestmentSector implements IBaseRequest {
     }
 
     private void buildQuery(Map<String, String> params) throws Exception {
+        params.put("paramCityParameter", "%");
+        params.put("paramTypeParameter", "%");
         params.put("paramBrandParameter", "%");
         params.put("paramBrandParameterArray", "%");
-        params.put("paramTypeParameter", "%");
-        params.put("paramCityParameter", "%");
 
         params.put("path", "/public/Sipex2/Dashboard/Dashboard.cda");
-        params.put("dataAccessId", "SectorInvestmentQuery");
+        params.put("dataAccessId", "BrandMonthInvestmentQuery");
 
         params.put("outputIndexId", "1");
         params.put("pageSize", "0");
@@ -71,25 +75,31 @@ public class EvolutiveInvestmentSector implements IBaseRequest {
 
     private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {        
         List<String> categories = new ArrayList<>();
+
         Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
+        Map<String, String> seriesMapFix = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = getDashboard(null);
         for (EvolutiveInvestmentDto content : list) {
-            buildCategories(categories, content.getMonth().substring(0, 3) + " " + content.getYear());
+            String cat = content.getMonth().substring(0, 3) + " " + content.getYear();
+            buildCategories(categories, cat);
 
-            String key = content.getSector();
-            Long cost = Long.parseLong(content.getCost());
+            String key = content.getBrand().replaceAll(" ", "");
 
             if (seriesMap.containsKey(key)) {
-                List<Long> l = seriesMap.get(key);                
-                l.add(cost);
+                List<Long> l = seriesMap.get(key);
+                long value = Long.parseLong(content.getCost());
+                l.add(value);
                 seriesMap.put(key, l);
             } else {
                 List<Long> v = new ArrayList<>();
-                v.add(cost);
+                v.add(Long.parseLong(content.getCost()));
                 seriesMap.put(key, v);
             }
+            seriesMapFix.put(key.replaceAll(" ", "") + " " + cat, key);
         }
+
+        fixNullableIndex(categories, seriesMapFix, seriesMap);
 
         List<Serie> series = buildSeriesWithMap(seriesMap);
         baseResponse.setCategories(categories);
@@ -99,6 +109,23 @@ public class EvolutiveInvestmentSector implements IBaseRequest {
     private void buildCategories(List<String> categories, String city) {
         if (!categories.contains(city)) {
             categories.add(city);
+        }
+    }
+
+    private void fixNullableIndex(List<String> categories, Map<String, String> seriesMapFix, Map<String, List<Long>> seriesMap) {
+        int counter = 0;
+        for (String category : categories) {
+            for (Map.Entry<String, List<Long>> entry : seriesMap.entrySet()) {
+                String key = entry.getKey();
+                List<Long> value = entry.getValue();
+                String brand = key.replaceAll(" ", "");
+
+                if (!seriesMapFix.containsKey(brand + " " + category)) {
+                    value.add(counter, 0L);
+                    seriesMap.put(key, value);
+                }
+            }
+            counter++;
         }
     }
 
@@ -119,8 +146,7 @@ public class EvolutiveInvestmentSector implements IBaseRequest {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(solrHost);
-            String query = "operationType:INV_BY_SECTOR&rows=5000&start=0";
-            builder = builder.path("/solr/dashboard-core/select?q=" + query);
+            builder = builder.path("/solr/dashboard-core/select?q=operationType:EV_INV_BRAND&rows=8000&start=1");
             if (params != null) {
                 for (Map.Entry<String, Object> entry : params.entrySet()) {
                     builder.queryParam(entry.getKey(), URLEncoder.encode(entry.getValue().toString(), "UTF-8"));
@@ -152,11 +178,10 @@ public class EvolutiveInvestmentSector implements IBaseRequest {
             JSONObject objectMapper = (JSONObject) doc;
 
             EvolutiveInvestmentDto investmentSectorDto = new EvolutiveInvestmentDto();
-
-            investmentSectorDto.setSector(fieldValidator(objectMapper, "sector"));
-            investmentSectorDto.setYear(fieldValidator(objectMapper, "year"));
-            investmentSectorDto.setMonth(fieldValidator(objectMapper, "month"));
+            investmentSectorDto.setBrand(fieldValidator(objectMapper, "brand"));
             investmentSectorDto.setCost(fieldValidator(objectMapper, "cost"));
+            investmentSectorDto.setMonth(fieldValidator(objectMapper, "month"));
+            investmentSectorDto.setYear(fieldValidator(objectMapper, "year"));
 
             list.add(investmentSectorDto);
         }

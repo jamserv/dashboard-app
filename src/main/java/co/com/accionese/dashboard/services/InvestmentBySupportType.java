@@ -1,10 +1,11 @@
 package co.com.accionese.dashboard.services;
 
-import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
+import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,49 +26,49 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import co.com.accionese.dashboard.api.IMultiRequest;
+import co.com.accionese.dashboard.api.IBaseRequest;
 
 /**
  *
  * @author janez
  */
 @Service
-public class TotalInversmentService implements IMultiRequest {
+public class InvestmentBySupportType implements IBaseRequest {
 
     private RestTemplate restTemplate;
     private String solrHost;
 
     @Autowired
-    public TotalInversmentService(RestTemplateBuilder builder) {
+    public InvestmentBySupportType(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 
     @Override
-    public List<BaseResponse> genericQuery(Map<String, String> params) {
+    public BaseResponse genericQuery(Map<String, String> params) {
         BaseResponse baseResponse = new BaseResponse();
         try {
             buildQuery(params);
             buildBaseResponse(baseResponse, params);
             baseResponse.setHttpStatus(HttpStatus.OK);
-            return null;
+            return baseResponse;
         } catch (Exception ex) {
             ex.printStackTrace();
             baseResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return null;
+            return baseResponse;
         }
     }
 
     private void buildQuery(Map<String, String> params) throws Exception {
-        params.put("paramTypeParameter", "%");
         params.put("paramBrandParameter", "%");
         params.put("paramBrandParameterArray", "%");
         params.put("paramMonthParameter", "%");
         params.put("paramMonthParameterArray", "%");
+        params.put("paramCityParameter", "%");
         params.put("paramYearParameter", "%");
         params.put("paramYearParameterArray", "%");
 
         params.put("path", "/public/Sipex2/Dashboard/Dashboard.cda");
-        params.put("dataAccessId", "CityInvestmentQuery");
+        params.put("dataAccessId", "TypeInvestmentQuery");
 
         params.put("outputIndexId", "1");
         params.put("pageSize", "0");
@@ -77,14 +78,13 @@ public class TotalInversmentService implements IMultiRequest {
     }
 
     private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
-        List<Integer> categories = new ArrayList<>();
-
+        
         Map<String, List<Long>> values = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = getDashboard(null);
-        for (EvolutiveInvestmentDto content : list) {
-            String key = content.getCity();
-
+        for (EvolutiveInvestmentDto content : list) {            
+            String key = content.getType();
+            
             if (values.containsKey(key)) {
                 List<Long> l = values.get(key);
                 long value = Long.parseLong(content.getCost());
@@ -95,12 +95,12 @@ public class TotalInversmentService implements IMultiRequest {
                 v.add(Long.parseLong(content.getCost()));
                 values.put(key, v);
             }
-            buildCategories(categories, Integer.parseInt(content.getYear()));
         }
+        
+        List<Serie> r = buildSerieWithMap(values);
 
-        List<Serie> series = buildSerieWithMap(values);
-        baseResponse.setNumericCategories(categories);
-        baseResponse.setSeries(series);
+        baseResponse.setNumericCategories(Arrays.asList(2015, 2016, 2017));
+        baseResponse.setSeries(r);
     }
 
     private List<Serie> buildSerieWithMap(Map<String, List<Long>> values) {
@@ -108,24 +108,18 @@ public class TotalInversmentService implements IMultiRequest {
         for (Map.Entry<String, List<Long>> entry : values.entrySet()) {
             String key = entry.getKey();
             List<Long> value = entry.getValue();
-
+            
             series.add(new Serie(key, value));
-
+            
         }
         return series;
-    }
-
-    private void buildCategories(List<Integer> categories, Integer year) {
-        if (!categories.contains(year)) {
-            categories.add(year);
-        }
     }
 
     public List<EvolutiveInvestmentDto> getDashboard(Map<String, Object> params) {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(solrHost);
-            String query = "operationType:INV_BY_CITY&rows=500&start=0";
+            String query = "operationType:INV_SUPPORT_TYPE&rows=500&start=0";
             builder = builder.path("/solr/dashboard-core/select?q=" + query);
             if (params != null) {
                 for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -158,10 +152,11 @@ public class TotalInversmentService implements IMultiRequest {
             JSONObject objectMapper = (JSONObject) doc;
 
             EvolutiveInvestmentDto investmentSectorDto = new EvolutiveInvestmentDto();
-
+            investmentSectorDto.setBrand(fieldValidator(objectMapper, "brand"));
             investmentSectorDto.setCost(fieldValidator(objectMapper, "cost"));
+            investmentSectorDto.setMonth(fieldValidator(objectMapper, "month"));
             investmentSectorDto.setYear(fieldValidator(objectMapper, "year"));
-            investmentSectorDto.setCity(fieldValidator(objectMapper, "city"));
+            investmentSectorDto.setType(fieldValidator(objectMapper, "type"));
 
             list.add(investmentSectorDto);
         }
