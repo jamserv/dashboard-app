@@ -3,7 +3,6 @@ package co.com.accionese.dashboard.services;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
-import co.com.accionese.dashboard.services.api.BaseRequest;
 import co.com.accionese.dashboard.services.api.MultiRequest;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -55,8 +54,7 @@ public class TotalInversmentService implements MultiRequest {
         } catch (Exception ex) {
             ex.printStackTrace();
             baseResponse.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            return null;
-            //return baseResponse;
+            return null;            
         }
     }
 

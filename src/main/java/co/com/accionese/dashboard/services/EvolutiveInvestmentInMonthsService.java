@@ -2,14 +2,11 @@ package co.com.accionese.dashboard.services;
 
 import co.com.accionese.dashboard.services.api.BaseRequest;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
-import co.com.accionese.dashboard.dto.apexcharts.Category;
 import co.com.accionese.dashboard.dto.apexcharts.Serie;
-import co.com.accionese.dashboard.dto.apexcharts.SerieSimple;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.json.simple.JSONArray;
@@ -36,7 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 @Service
 public class EvolutiveInvestmentInMonthsService implements BaseRequest {
-    
+
     private RestTemplate restTemplate;
     private String solrHost;
 
@@ -50,8 +47,8 @@ public class EvolutiveInvestmentInMonthsService implements BaseRequest {
         BaseResponse baseResponse = new BaseResponse();
         try {
             buildQuery(params);
-            baseResponse.setSeries(buildSeries(params));
-            baseResponse.setCategories(Arrays.asList("Vallas", "Transmilenio", "Paraderos"));
+            buildBaseResponse(baseResponse, params);
+
             baseResponse.setHttpStatus(HttpStatus.OK);
             return baseResponse;
         } catch (Exception ex) {
@@ -78,67 +75,50 @@ public class EvolutiveInvestmentInMonthsService implements BaseRequest {
         params.put("paramsearchBox", "");
     }
 
-    private List<Serie> buildSeries(Map<String, String> params) throws Exception {
-        //String response = pentahoService.genericPentahoRequest(params);
+    private void buildBaseResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
 
-        List<SerieSimple> serieSimples = new ArrayList<>();
-        Map<String, Category> categories = new HashMap<>();
-        
-        
+        List<String> categories = new ArrayList<>();
+
+        Map<String, List<Long>> values = new LinkedHashMap<>();
+
         List<EvolutiveInvestmentDto> list = getDashboard(null);
         for (EvolutiveInvestmentDto content : list) {
-            String category = content.getMonth() + " " + content.getYear();
-            categories.put(category, new Category(category));
+            String key = content.getType();
 
-            String key = content.getType() + "" + content.getYear() + "" + content.getMonth();
-            serieSimples.add(new SerieSimple(key, Long.parseLong(content.getCost())));
+            if (values.containsKey(key)) {
+                List<Long> l = values.get(key);
+                long value = Long.parseLong(content.getCost());
+                l.add(value);
+                values.put(key, l);
+            } else {
+                List<Long> v = new ArrayList<>();
+                v.add(Long.parseLong(content.getCost()));
+                values.put(key, v);
+            }
+            buildCategories(categories, content.getMonth().substring(0, 3) + " " + content.getYear());
         }
 
-        List<Serie> r = buildSeries(serieSimples);
-
-        return r;
+        List<Serie> series = buildSerieWithMap(values);
+        baseResponse.setCategories(categories);
+        baseResponse.setSeries(series);
     }
 
-    private List<Serie> buildSeries(List<SerieSimple> serieSimples) {
-        List<Long> setVallas = new ArrayList<>();
-        List<Long> setParaderos = new ArrayList<>();
-        List<Long> setTransmilenio = new ArrayList<>();
-
-        Map<String, Long> map = new HashMap<>();
-        List<Serie> series = new ArrayList<>();
-        for (SerieSimple serieSimple : serieSimples) {
-            if (map.containsKey(serieSimple.getName())) {
-                long d = map.get(serieSimple.getName()) + serieSimple.getData();
-                map.put(serieSimple.getName(), d);
-
-                if (serieSimple.getName().startsWith("Vallas")) {
-                    setVallas.remove(setVallas.size() - 1);
-                    setVallas.add(d);
-                } else if (serieSimple.getName().startsWith("Paraderos")) {
-                    setParaderos.remove(setParaderos.size() - 1);
-                    setParaderos.add(d);
-                } else if (serieSimple.getName().startsWith("Transmilenio")) {
-                    setTransmilenio.remove(setTransmilenio.size() - 1);
-                    setTransmilenio.add(d);
-                }
-            } else {
-                if (serieSimple.getName().startsWith("Vallas")) {
-                    setVallas.add(serieSimple.getData());
-                } else if (serieSimple.getName().startsWith("Paraderos")) {
-                    setParaderos.add(serieSimple.getData());
-                } else if (serieSimple.getName().startsWith("Transmilenio")) {
-                    setTransmilenio.add(serieSimple.getData());
-                }
-                map.put(serieSimple.getName(), serieSimple.getData());
-            }
+    private void buildCategories(List<String> categories, String year) {
+        if (!categories.contains(year)) {
+            categories.add(year);
         }
+    }
 
-        series.add(new Serie("Vallas", setVallas));
-        series.add(new Serie("Paraderos", setParaderos));
-        series.add(new Serie("Transmilenio", setTransmilenio));
+    private List<Serie> buildSerieWithMap(Map<String, List<Long>> values) {
+        List<Serie> series = new ArrayList<>();
+        for (Map.Entry<String, List<Long>> entry : values.entrySet()) {
+            String key = entry.getKey();
+            List<Long> value = entry.getValue();
 
+            series.add(new Serie(key, value));
+
+        }
         return series;
-
     }
 
     public List<EvolutiveInvestmentDto> getDashboard(Map<String, Object> params) {
