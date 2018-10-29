@@ -1,4 +1,28 @@
+# Eclipse
 .classpath
 .project
 .settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
 target/
+
+
+# Netbeans
+nbproject/private/
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+node_modules/
+bower_components/
+application.properties
