@@ -169,6 +169,8 @@
                     </div>
                 </div>
 
+                <vue-element-loading :active="isActive" :is-full-screen="true"/>
+
 
             </div>
         </div>
@@ -177,12 +179,13 @@
 <script>
     import VueApexCharts from 'vue-apexcharts'
     import axios from 'axios'
+    import VueElementLoading from 'vue-element-loading'
 
     axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
 
     export default {
         components: {
-            'apexcharts': VueApexCharts
+            'apexcharts': VueApexCharts, VueElementLoading
         },
         name: 'about',
         mounted() {
@@ -194,16 +197,10 @@
             this.buildInvSector();
             this.buildTopCampanas();
             this.buildEvolutiveInvBran();
-            this.buildGeneralRequest();
         },
         data() {
             return {
-                color: '#1A237E',
-                color1: '#4527A0',
-                size: '45px',
-                margin: '2px',
-                radius: '2px',
-                loading: false,
+                isActive: true,
 
                 sparkLine1: {
                     series: null
@@ -232,19 +229,11 @@
             }
         },
         methods: {
-            buildGeneralRequest(type, params) {
-                if (type === 'eim') {
-                    axios.get('/getEvolutiveInvMonths', {
-                        params: params
-                    }).then(function (response) {
-                        return response;
-                    }).catch(function (error) {
-                        return error;
-                    });
-                }
-            },
             buildSparkLine() {
                 this.sparkLine1 = {
+                    tooltip: {
+                        theme: 'dark'
+                    },
                     chart: {
                         type: 'area',
                         height: 80,
@@ -285,6 +274,7 @@
                 }
             },
             buildEvolutiveInvMonths() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getEvolutiveInvMonths', {
                     params: null
@@ -307,10 +297,6 @@
                                 autoSelected: 'zoom'
                             },
                         },
-                        grid: {
-                            show: true,
-                            borderColor: '#e0e3e8'
-                        },
                         dataLabels: {
                             enabled: false,
                             offsetX: 0
@@ -327,16 +313,16 @@
                         },
                         series: data.series,
                         tooltip: {
-                            x: {
-                                format: 'dd/MM/yy HH:mm'
-                            },
+                            theme: 'dark'
                         }
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             },
             buildInvSupportType() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getInvBySupportType', {
                     params: null
@@ -376,6 +362,7 @@
                             }
                         },
                         tooltip: {
+                            theme: 'dark',
                             y: {
                                 formatter: function (val) {
                                     return '$' + val.toFixed(2);
@@ -384,11 +371,13 @@
                         },
                         series: data.series
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             },
             buildEvolutiveInvBranSupport() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getEvolutiveInvertionBranBySupportTypeService', {
                     params: null
@@ -451,11 +440,13 @@
                             }
                         }
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             },
             buildByInvCity() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getInvestmentByCity', {
                     params: null
@@ -502,6 +493,7 @@
                             }
                         },
                         tooltip: {
+                            theme: 'dark',
                             y: {
                                 formatter: function (val) {
                                     return '$' + val.toFixed(2);
@@ -510,11 +502,13 @@
                         },
                         series: data.series
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             },
             buildInvSector() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getEvolutiveInvestmentSector', {
                     params: null
@@ -527,16 +521,6 @@
                             stacked: true,
                             stackType: '100%'
                         },
-                        responsive: [{
-                            breakpoint: 700,
-                            options: {
-                                legend: {
-                                    position: 'bottom',
-                                    offsetX: -10,
-                                    offsetY: 0
-                                }
-                            }
-                        }],
                         series: data.series,
                         xaxis: {
                             labels: {
@@ -552,6 +536,7 @@
                             horizontalAlign: 'center'
                         },
                         tooltip: {
+                            theme: 'dark',
                             y: {
                                 formatter: function (val) {
                                     return '$' + val.toFixed(2)
@@ -570,17 +555,22 @@
                             }
                         }
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             },
             buildTopCampanas() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getInvestmentByTopCampaign', {
                     params: null
                 }).then(function (response) {
                     let data = response.data;
                     self.chartOptionsTopCampanas = {
+                        tooltip: {
+                            theme: 'dark'
+                        },
                         chart: {
                             type: 'line'
                         },
@@ -615,17 +605,22 @@
                             horizontalAlign: 'center'
                         }
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             },
             buildEvolutiveInvBran() {
+                this.isActive = true
                 let self = this;
                 axios.get('/getEvolutiveBrandAnnualInvestment', {
                     params: null
                 }).then(function (response) {
                     let data = response.data;
                     self.chartOptionsEvolutivoInvMarca = {
+                        tooltip: {
+                            theme: 'dark'
+                        },
                         chart: {
                             height: 350,
                             type: 'bar',
@@ -659,11 +654,11 @@
                             horizontalAlign: 'center'
                         }
                     }
+                    self.isActive = false
                 }).catch(function (error) {
                     return error;
                 });
             }
-
         }
     }
 </script>
