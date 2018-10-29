@@ -8,4 +8,10 @@ Download image https://hub.docker.com/_/solr/
 
 3. docker exec -it --user=solr dashboard-solr bin/solr create_core -c dashboard-core
 
-4. npm run serve
+***split file***
+split -b 500000 clean_data.csv clean
+
+--DELETE ALL DOCs
+<delete>
+<query>*:*</query>
+</delete>
