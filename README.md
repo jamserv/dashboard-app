@@ -12,6 +12,8 @@ Download image https://hub.docker.com/_/solr/
 split -b 500000 clean_data.csv clean
 
 --DELETE ALL DOCs
+'''
 <delete>
 <query>*:*</query>
 </delete>
+'''
