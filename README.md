@@ -27,3 +27,4 @@ Download image https://hub.docker.com/_/solr/
 * INV_SUPPORT_TYPE --> year
 * TOTAL_INV --> year
 * TOP_CAMPANAS --> brand * yea
+* GET_ALL_BRANDS
