@@ -194,7 +194,7 @@
             bus.$on('updateParams', (filter) => {
                 this.brands = '';
                 this.years = filter.year;
-                filter.brands.forEach(function(element) {
+                filter.brands.forEach(function (element) {
                     self.brands += ' AND brand:' + element;
                 });
                 this.runAllRequest();
@@ -282,20 +282,18 @@
             runAllRequest() {
                 this.buildSparkLine();
                 this.buildEvolutiveInvMonths();
-                /*
                 this.buildInvSupportType();
                 this.buildEvolutiveInvBranSupport();
                 this.buildByInvCity();
                 this.buildInvSector();
                 this.buildTopCampanas();
                 this.buildEvolutiveInvBran();
-                */
             },
             buildEvolutiveInvMonths() {
                 this.isActive = true
                 let self = this;
 
-                axios.get('/getEvolutiveInvMonths?years=' + this.years + '&brands=' + this.brands,
+                axios.get('/getEvolutiveInvMonths?years=' + this.years + '&brands=' + this.brands
                 ).then(function (response) {
                     var data = response.data;
                     self.chartOptionsg1 = {
@@ -347,9 +345,7 @@
             buildInvSupportType() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvBySupportType', {
-                    params: null
-                }).then(function (response) {
+                axios.get('/getInvBySupportType?years=' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg2 = {
                         chart: {
@@ -402,9 +398,7 @@
             buildEvolutiveInvBranSupport() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvertionBranBySupportTypeService', {
-                    params: null
-                }).then(function (response) {
+                axios.get('/getEvolutiveInvertionBranBySupportTypeService' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg3 = {
                         chart: {
@@ -466,9 +460,7 @@
             buildByInvCity() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvestmentByCity', {
-                    params: null
-                }).then(function (response) {
+                axios.get('/getInvestmentByCity' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsgInversionCity = {
                         chart: {
@@ -528,9 +520,7 @@
             buildInvSector() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvestmentSector', {
-                    params: null
-                }).then(function (response) {
+                axios.get('/getEvolutiveInvestmentSector' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsgInversionSector = {
                         chart: {
@@ -581,9 +571,7 @@
             buildTopCampanas() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvestmentByTopCampaign', {
-                    params: null
-                }).then(function (response) {
+                axios.get('/getInvestmentByTopCampaign' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsTopCampanas = {
                         tooltip: {
@@ -636,9 +624,7 @@
             buildEvolutiveInvBran() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveBrandAnnualInvestment', {
-                    params: null
-                }).then(function (response) {
+                axios.get('/getEvolutiveBrandAnnualInvestment' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsEvolutivoInvMarca = {
                         tooltip: {
@@ -688,7 +674,7 @@
                 });
             },
             formatPrice(value) {
-                let val = (value/1).toFixed(2).replace('.', ',')
+                let val = (value / 1).toFixed(2).replace('.', ',')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
             }
         }
