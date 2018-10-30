@@ -204,7 +204,7 @@
                             <h5>Año</h5>
                             <div class="form-group">
 
-                                <select @change="applyFilter" v-model="years" class="form-control">
+                                <select @change="applyFilter" v-model="year" class="form-control">
                                     <option>--</option>
                                     <option>2015</option>
                                     <option>2016</option>
@@ -221,7 +221,6 @@
                                              selectLabel=""
                                              selectedLabel=""
                                              deselectLabel=""
-                                             showLabels="false"
                                              :taggable="true"
                                              @remove="applyFilter"
                                              @select="applyFilter"
@@ -256,8 +255,8 @@
             return {
                 brand: [],
                 brands:[],
-                years:[],
-                hideMenu: true,
+                year:'',
+                hideMenu: true
             }
         },
         methods: {
@@ -282,7 +281,12 @@
                 });
             },
             applyFilter() {
-                bus.$emit('updateParams', this.years);
+                let self = this;
+                var filter = {
+                    year: self.year,
+                    brands: self.brand
+                }
+                bus.$emit('updateParams', filter);
             },
             checkMenuStatus() {
                 if (this.hideMenu) {

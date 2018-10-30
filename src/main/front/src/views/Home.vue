@@ -190,9 +190,13 @@
         },
         name: 'about',
         mounted() {
-            bus.$on('updateParams', (year) => {
-                this.years = year;
-
+            let self = this;
+            bus.$on('updateParams', (filter) => {
+                this.brands = '';
+                this.years = filter.year;
+                filter.brands.forEach(function(element) {
+                    self.brands += ' AND brand:' + element;
+                });
                 this.runAllRequest();
             });
 
@@ -291,7 +295,7 @@
                 this.isActive = true
                 let self = this;
 
-                axios.get('/getEvolutiveInvMonths?years=' + this.years + '&brands=',
+                axios.get('/getEvolutiveInvMonths?years=' + this.years + '&brands=' + this.brands,
                 ).then(function (response) {
                     var data = response.data;
                     self.chartOptionsg1 = {
