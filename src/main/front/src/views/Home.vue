@@ -180,6 +180,7 @@
     import VueApexCharts from 'vue-apexcharts'
     import axios from 'axios'
     import VueElementLoading from 'vue-element-loading'
+    import {bus} from '../main';
 
     axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
 
@@ -189,18 +190,19 @@
         },
         name: 'about',
         mounted() {
-            this.buildSparkLine();
-            this.buildEvolutiveInvMonths();
-            this.buildInvSupportType();
-            this.buildEvolutiveInvBranSupport();
-            this.buildByInvCity();
-            this.buildInvSector();
-            this.buildTopCampanas();
-            this.buildEvolutiveInvBran();
+            bus.$on('updateParams', (year) => {
+                this.years = year;
+
+                this.runAllRequest();
+            });
+
+            this.runAllRequest();
         },
         data() {
             return {
                 isActive: true,
+                years: '',
+                brands: '',
 
                 sparkLine1: {
                     series: null
@@ -273,12 +275,24 @@
                     }
                 }
             },
+            runAllRequest() {
+                this.buildSparkLine();
+                this.buildEvolutiveInvMonths();
+                /*
+                this.buildInvSupportType();
+                this.buildEvolutiveInvBranSupport();
+                this.buildByInvCity();
+                this.buildInvSector();
+                this.buildTopCampanas();
+                this.buildEvolutiveInvBran();
+                */
+            },
             buildEvolutiveInvMonths() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvMonths', {
-                    params: null
-                }).then(function (response) {
+
+                axios.get('/getEvolutiveInvMonths?years=' + this.years + '&brands=',
+                ).then(function (response) {
                     var data = response.data;
                     self.chartOptionsg1 = {
                         chart: {
@@ -313,7 +327,12 @@
                         },
                         series: data.series,
                         tooltip: {
-                            theme: 'dark'
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return self.formatPrice(val);
+                                }
+                            }
                         }
                     }
                     self.isActive = false
@@ -365,7 +384,7 @@
                             theme: 'dark',
                             y: {
                                 formatter: function (val) {
-                                    return '$' + val.toFixed(2);
+                                    return self.formatPrice(val);
                                 }
                             }
                         },
@@ -428,14 +447,9 @@
                         },
                         tooltip: {
                             theme: 'dark',
-                            x: {
-                                show: true
-                            },
                             y: {
-                                title: {
-                                    formatter: function () {
-                                        return ''
-                                    }
+                                formatter: function (val) {
+                                    return self.formatPrice(val);
                                 }
                             }
                         }
@@ -496,7 +510,7 @@
                             theme: 'dark',
                             y: {
                                 formatter: function (val) {
-                                    return '$' + val.toFixed(2);
+                                    return self.formatPrice(val);
                                 }
                             }
                         },
@@ -569,7 +583,12 @@
                     let data = response.data;
                     self.chartOptionsTopCampanas = {
                         tooltip: {
-                            theme: 'dark'
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return self.formatPrice(val);
+                                }
+                            }
                         },
                         chart: {
                             type: 'line'
@@ -619,7 +638,12 @@
                     let data = response.data;
                     self.chartOptionsEvolutivoInvMarca = {
                         tooltip: {
-                            theme: 'dark'
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return self.formatPrice(val);
+                                }
+                            }
                         },
                         chart: {
                             height: 350,
@@ -658,6 +682,10 @@
                 }).catch(function (error) {
                     return error;
                 });
+            },
+            formatPrice(value) {
+                let val = (value/1).toFixed(2).replace('.', ',')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
             }
         }
     }

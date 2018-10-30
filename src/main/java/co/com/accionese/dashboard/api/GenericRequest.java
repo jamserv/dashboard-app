@@ -50,10 +50,12 @@ public class GenericRequest {
 
     private UriComponents buildRequestParams(Map<String, String> params, UriComponentsBuilder builder) throws Exception {
         String operationType = params.get("operationType");
-        String query = operationType + "&rows=8000&start=1";
-        
+        String where = buildWhere(params);
+
+        String query = operationType + where + "&rows=2000&start=1";
+
         builder = builder.path("/solr/dashboard-core/select?q=operationType:" + query);
-        
+
         return builder.build();
     }
 
@@ -71,6 +73,13 @@ public class GenericRequest {
             ex.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    private String buildWhere(Map<String, String> params) {        
+        if (params.get("where").length() > 0) {
+            return params.get("where");            
+        }
+        return "";
     }
 
     private List<EvolutiveInvestmentDto> buildResponse(String content) throws ParseException {

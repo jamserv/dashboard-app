@@ -10,7 +10,9 @@
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/GenericRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/IMultiRequest.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentBySector.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/KeyValueObject.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/dto/EvolutiveInvestmentDto.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/Brands.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/BaseQueryBuilder.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentByMonths.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentAnualByBrand.java

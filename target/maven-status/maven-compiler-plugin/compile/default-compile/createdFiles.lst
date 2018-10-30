@@ -1,3 +1,4 @@
+co/com/accionese/dashboard/services/Brands.class
 co/com/accionese/dashboard/services/InvestmentBySupportType.class
 co/com/accionese/dashboard/api/IBaseRequest.class
 co/com/accionese/dashboard/controllers/DashboardController.class
@@ -16,4 +17,5 @@ co/com/accionese/dashboard/services/InvestmentBranBySupportType.class
 co/com/accionese/dashboard/dto/apexcharts/Serie.class
 co/com/accionese/dashboard/api/BaseQueryBuilder.class
 co/com/accionese/dashboard/dto/apexcharts/SerieSimple.class
+co/com/accionese/dashboard/dto/KeyValueObject.class
 co/com/accionese/dashboard/api/Constants.class
