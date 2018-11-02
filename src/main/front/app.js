@@ -9,5 +9,5 @@ app.get('/', function (req, res) {
 
 app.listen(9985, function(){
 	console.log(' -> run server ' + new Date());
-	console.log(" -> Dashboard run on port 8080")
+	console.log(" -> Dashboard run on port 9985")
 });
