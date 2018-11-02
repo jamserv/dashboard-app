@@ -182,7 +182,7 @@
     import VueElementLoading from 'vue-element-loading'
     import {bus} from '../main';
 
-    axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
+    axios.defaults.baseURL = 'http://104.237.159.49:9898/api/dashboard';
 
     export default {
         components: {
