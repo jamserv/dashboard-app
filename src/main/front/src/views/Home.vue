@@ -194,8 +194,14 @@
             bus.$on('updateParams', (filter) => {
                 this.brands = '';
                 this.years = filter.year;
+                var count = 0;
                 filter.brands.forEach(function (element) {
-                    self.brands += ' AND brand:' + element;
+                    if (count > 0) {
+                        self.brands += ' OR ' + element;
+                    } else {
+                        self.brands += element;
+                    }
+                    count++;
                 });
                 this.runAllRequest();
             });
@@ -205,8 +211,8 @@
         data() {
             return {
                 isActive: true,
-                years: '',
-                brands: '',
+                years: '--',
+                brands: '--',
 
                 sparkLine1: {
                     series: null
@@ -345,7 +351,7 @@
             buildInvSupportType() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvBySupportType?years=' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getInvBySupportType?years=' + this.years).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg2 = {
                         chart: {
@@ -398,7 +404,7 @@
             buildEvolutiveInvBranSupport() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvertionBranBySupportTypeService' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getEvolutiveInvertionBranBySupportTypeService?years=' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg3 = {
                         chart: {
@@ -460,7 +466,7 @@
             buildByInvCity() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvestmentByCity' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getInvestmentByCity?years=' + this.years).then(function (response) {
                     let data = response.data;
                     self.chartOptionsgInversionCity = {
                         chart: {
@@ -520,7 +526,7 @@
             buildInvSector() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvestmentSector' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getEvolutiveInvestmentSector?years=' + this.years).then(function (response) {
                     let data = response.data;
                     self.chartOptionsgInversionSector = {
                         chart: {
@@ -571,7 +577,7 @@
             buildTopCampanas() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvestmentByTopCampaign' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getInvestmentByTopCampaign?years=' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsTopCampanas = {
                         tooltip: {
@@ -624,7 +630,7 @@
             buildEvolutiveInvBran() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveBrandAnnualInvestment' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getEvolutiveBrandAnnualInvestment?years=' + this.years + '&brands=' + this.brands).then(function (response) {
                     let data = response.data;
                     self.chartOptionsEvolutivoInvMarca = {
                         tooltip: {
@@ -636,7 +642,7 @@
                             }
                         },
                         chart: {
-                            height: 350,
+                            height: 600,
                             type: 'bar',
                             stacked: true,
                             stackType: '100%'

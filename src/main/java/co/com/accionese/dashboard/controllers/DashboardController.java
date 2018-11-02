@@ -184,7 +184,8 @@ public class DashboardController {
         }
         if (!brands.isEmpty()) {
             if (!brands.equalsIgnoreCase("--")) {
-                builder.append(" AND brand:" + brands);
+                builder.append(" AND brand:(" + brands);
+                builder.append(")");
             }
         }
 
