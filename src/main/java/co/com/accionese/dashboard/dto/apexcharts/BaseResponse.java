@@ -14,6 +14,7 @@ public class BaseResponse implements Serializable {
     private List<String> categories;
     private List<Integer> numericCategories;
     private List<Serie> series;
+    private List<Long> numericSeries;
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
@@ -45,6 +46,14 @@ public class BaseResponse implements Serializable {
 
     public void setSeries(List<Serie> series) {
         this.series = series;
+    }
+
+    public List<Long> getNumericSeries() {
+        return numericSeries;
+    }
+
+    public void setNumericSeries(List<Long> numericSeries) {
+        this.numericSeries = numericSeries;
     }
 
 }

@@ -69,8 +69,8 @@
                                     </i>
                                     <span class="font-size-40 font-weight-100">4,367</span>
                                     <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
-                                    <apexcharts height="80" type="area" :options="sparkLine1"
-                                                :series="sparkLine1.series"></apexcharts>
+                                    <apexcharts height="80" type="pie" :options="chartTotalInv"
+                                                :series="chartTotalInv.series"></apexcharts>
                                 </div>
                             </div>
                         </div>
@@ -78,12 +78,11 @@
 
                 </div>
 
-                <div class="row">
+                <div class="row" v-show="chartOptionsg1">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion Mensual</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <divrea>
                             <apexcharts height="350" type="area" :options="chartOptionsg1"
                                         :series="chartOptionsg1.series"></apexcharts>
@@ -91,12 +90,11 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" v-show="chartOptionsg2">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Inversion por Tipo de Soporte</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
                             <apexcharts height="350" type="bar" :options="chartOptionsg2"
                                         :series="chartOptionsg2.series"></apexcharts>
@@ -104,12 +102,11 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" v-show="chartOptionsg3">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion Marca por Tipo Soporte</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
                             <apexcharts height="500" type="bar" :options="chartOptionsg3"
                                         :series="chartOptionsg3.series"></apexcharts>
@@ -117,12 +114,11 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" v-show="chartOptionsgInversionCity">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Inversion por Ciudad</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
                             <apexcharts height="450" type="bar" :options="chartOptionsgInversionCity"
                                         :series="chartOptionsgInversionCity.series"></apexcharts>
@@ -130,12 +126,11 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" v-show="chartOptionsgInversionSector">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion por Sector</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
                             <apexcharts height="600" type="bar" :options="chartOptionsgInversionSector"
                                         :series="chartOptionsgInversionSector.series"></apexcharts>
@@ -143,12 +138,12 @@
                     </div>
                 </div>
 
-                <div class="row">
+
+                <div class="row" v-show="chartOptionsTopCampanas">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">TOP Campañas</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
                             <apexcharts height="450" type="line" :options="chartOptionsTopCampanas"
                                         :series="chartOptionsTopCampanas.series"></apexcharts>
@@ -156,12 +151,11 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" v-show="chartOptionsEvolutivoInvMarca">
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversion por Marca</p>
-                        <p>Quisque volutpat condimentum velit. Class aptent taciti</p>
                         <div>
                             <apexcharts height="600" type="bar" :options="chartOptionsEvolutivoInvMarca"
                                         :series="chartOptionsEvolutivoInvMarca.series"></apexcharts>
@@ -182,7 +176,7 @@
     import VueElementLoading from 'vue-element-loading'
     import {bus} from '../main';
 
-    axios.defaults.baseURL = 'http://104.237.159.49:9898/api/dashboard';
+    axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
 
     export default {
         components: {
@@ -214,6 +208,9 @@
                 years: '--',
                 brands: '--',
 
+                chartTotalInv: {
+                    series: []
+                },
                 sparkLine1: {
                     series: null
                 },
@@ -286,6 +283,7 @@
                 }
             },
             runAllRequest() {
+                this.buildTotalInversion();
                 this.buildSparkLine();
                 this.buildEvolutiveInvMonths();
                 this.buildInvSupportType();
@@ -295,6 +293,44 @@
                 this.buildTopCampanas();
                 this.buildEvolutiveInvBran();
             },
+
+            buildTotalInversion() {
+                this.isActive = true
+                let self = this;
+
+                axios.get('/getTotalInversment?years=' + this.years
+                ).then(function (response) {
+                    var data = response.data;
+                    self.chartTotalInv = {
+                        chart: {
+                            height: 100,
+                            type: 'bar'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                            }
+                        },
+                        series: [{
+                            data: data.numericSeries
+                        }],
+                        xaxis: {
+                            labels: {
+                                show: false
+                            },
+                            categories: data.numericCategories,
+                        },
+                        dataLabels: {
+                            enabled: false,
+                            offsetX: 0
+                        },
+                    }
+                    self.isActive = false
+                }).catch(function (error) {
+                    return error;
+                });
+            },
+
             buildEvolutiveInvMonths() {
                 this.isActive = true
                 let self = this;
@@ -440,13 +476,7 @@
                         },
                         yaxis: {
                             labels: {
-                                style: {
-                                    color: '#8e8da4',
-                                },
-                                offsetX: 0,
-                                formatter: function (val) {
-                                    return '$' + val.toFixed(2);
-                                },
+                                show: false
                             }
                         },
                         tooltip: {
@@ -559,13 +589,7 @@
                         },
                         yaxis: {
                             labels: {
-                                style: {
-                                    color: '#8e8da4',
-                                },
-                                offsetX: 0,
-                                formatter: function (val) {
-                                    return val.toFixed(0) + "%";
-                                },
+                                show: false
                             }
                         }
                     }
@@ -668,7 +692,11 @@
                         fill: {
                             opacity: 1
                         },
-
+                        yaxis: {
+                            labels: {
+                                show: false
+                            }
+                        },
                         legend: {
                             position: 'bottom',
                             horizontalAlign: 'center'

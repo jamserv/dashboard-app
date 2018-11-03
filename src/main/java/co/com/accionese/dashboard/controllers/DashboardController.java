@@ -11,6 +11,7 @@ import co.com.accionese.dashboard.services.InvestmentBySector;
 import co.com.accionese.dashboard.services.InvestmentByCity;
 import co.com.accionese.dashboard.services.InvestmentBySupportType;
 import co.com.accionese.dashboard.services.InvestmentByTopCampaign;
+import co.com.accionese.dashboard.services.TotalInversment;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,23 @@ public class DashboardController {
 
     @Autowired
     Brands brands;
+    
+    @Autowired
+    TotalInversment totalInversment;
+    
+      /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversment")
+    @ResponseBody
+    BaseResponse getTotalInversment(@RequestParam("years") String years) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, "--");
+        
+        return totalInversment.genericQuery(params);
+    }
 
     /**
      * see GET_ALL_BRANDS
