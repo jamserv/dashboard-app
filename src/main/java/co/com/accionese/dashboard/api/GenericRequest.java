@@ -52,7 +52,7 @@ public class GenericRequest {
         String operationType = params.get("operationType");
         String where = buildWhere(params);
 
-        String query = operationType + where + "&rows=2000&start=1";
+        String query = operationType + where + "&rows=2000&start=0";
 
         builder = builder.path("/solr/dashboard-core/select?q=operationType:" + query);
 

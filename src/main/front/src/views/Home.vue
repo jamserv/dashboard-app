@@ -7,16 +7,16 @@
                         <div class="card card-shadow">
                             <div class="card-block bg-white p-20">
                                 <button type="button" class="btn btn-floating btn-sm btn-warning">
-                                    <i class="icon wb-shopping-cart"></i>
+                                    <i class="icon wb-check"></i>
                                 </button>
                                 <span class="ml-15 font-weight-400">VALLAS</span>
                                 <div class="content-text text-center mb-0">
-                                    <i class="text-danger icon wb-triangle-up font-size-20">
+                                    <i class="text-success icon wb-triangle-up font-size-20">
                                     </i>
-                                    <span class="font-size-40 font-weight-100">399</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
-                                    <apexcharts height="80" type="area" :options="sparkLine1"
-                                                :series="sparkLine1.series"></apexcharts>
+                                    <span class="font-size-26 font-weight-100">${{vallastotal}}</span>
+                                    <p class="blue-grey-400 font-weight-100 m-0">Inversión Total</p>
+                                    <apexcharts height="80" type="pie" :options="chartTotalInvVallas"
+                                                :series="chartTotalInvVallas.series"></apexcharts>
                                 </div>
                             </div>
                         </div>
@@ -25,16 +25,16 @@
                         <div class="card card-shadow">
                             <div class="card-block bg-white p-20">
                                 <button type="button" class="btn btn-floating btn-sm btn-danger">
-                                    <i class="icon wt-money"></i>
+                                    <i class="icon wb-check"></i>
                                 </button>
                                 <span class="ml-15 font-weight-400">PARADEROS</span>
                                 <div class="content-text text-center mb-0">
-                                    <i class="text-success icon wb-triangle-down font-size-20">
+                                    <i class="text-success icon wb-triangle-up font-size-20">
                                     </i>
-                                    <span class="font-size-40 font-weight-100">$18,628</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
-                                    <apexcharts height="80" type="area" :options="sparkLine1"
-                                                :series="sparkLine1.series"></apexcharts>
+                                    <span class="font-size-26 font-weight-100">${{paraderostotal}}</span>
+                                    <p class="blue-grey-400 font-weight-100 m-0">Inversión Total</p>
+                                    <apexcharts height="80" type="pie" :options="chartTotalInvParaderos"
+                                                :series="chartTotalInvParaderos.series"></apexcharts>
                                 </div>
                             </div>
                         </div>
@@ -43,16 +43,16 @@
                         <div class="card card-shadow">
                             <div class="card-block bg-white p-20">
                                 <button type="button" class="btn btn-floating btn-sm btn-success">
-                                    <i class="icon wb-eye"></i>
+                                    <i class="icon wb-check"></i>
                                 </button>
                                 <span class="ml-15 font-weight-400">SITM</span>
                                 <div class="content-text text-center mb-0">
-                                    <i class="text-danger icon wb-triangle-up font-size-20">
+                                    <i class="text-success icon wb-triangle-up font-size-20">
                                     </i>
-                                    <span class="font-size-40 font-weight-100">23,456</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
-                                    <apexcharts height="80" type="area" :options="sparkLine1"
-                                                :series="sparkLine1.series"></apexcharts>
+                                    <span class="font-size-26 font-weight-100">${{sitmtotal}}</span>
+                                    <p class="blue-grey-400 font-weight-100 m-0">Inversión Total</p>
+                                    <apexcharts height="80" type="pie" :options="chartTotalInvSitm"
+                                                :series="chartTotalInvSitm.series"></apexcharts>
                                 </div>
                             </div>
                         </div>
@@ -61,14 +61,14 @@
                         <div class="card card-shadow">
                             <div class="card-block bg-white p-20">
                                 <button type="button" class="btn btn-floating btn-sm btn-primary">
-                                    <i class="icon wb-user"></i>
+                                    <i class="icon wb-check"></i>
                                 </button>
                                 <span class="ml-15 font-weight-400">TOTAL</span>
                                 <div class="content-text text-center mb-0">
-                                    <i class="text-danger icon wb-triangle-up font-size-20">
+                                    <i class="text-success icon wb-triangle-up font-size-20">
                                     </i>
-                                    <span class="font-size-40 font-weight-100">4,367</span>
-                                    <p class="blue-grey-400 font-weight-100 m-0">+45% en desarrollo</p>
+                                    <span class="font-size-26 font-weight-100">${{invtotal}}</span>
+                                    <p class="blue-grey-400 font-weight-100 m-0">Inversión Total</p>
                                     <apexcharts height="80" type="pie" :options="chartTotalInv"
                                                 :series="chartTotalInv.series"></apexcharts>
                                 </div>
@@ -82,7 +82,7 @@
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
-                        <p class="font-size-20 blue-grey-700">Evolutivo Inversion Mensual</p>
+                        <p class="font-size-20 blue-grey-700">Evolutivo Inversión Mensual</p>
                         <divrea>
                             <apexcharts height="350" type="area" :options="chartOptionsg1"
                                         :series="chartOptionsg1.series"></apexcharts>
@@ -94,7 +94,7 @@
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
-                        <p class="font-size-20 blue-grey-700">Inversion por Tipo de Soporte</p>
+                        <p class="font-size-20 blue-grey-700">Inversión por Tipo de Soporte</p>
                         <div>
                             <apexcharts height="350" type="bar" :options="chartOptionsg2"
                                         :series="chartOptionsg2.series"></apexcharts>
@@ -106,7 +106,7 @@
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
-                        <p class="font-size-20 blue-grey-700">Evolutivo Inversion Marca por Tipo Soporte</p>
+                        <p class="font-size-20 blue-grey-700">Evolutivo Inversión Marca por Tipo Soporte</p>
                         <div>
                             <apexcharts height="500" type="bar" :options="chartOptionsg3"
                                         :series="chartOptionsg3.series"></apexcharts>
@@ -118,7 +118,7 @@
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
-                        <p class="font-size-20 blue-grey-700">Inversion por Ciudad</p>
+                        <p class="font-size-20 blue-grey-700">Inversión por Ciudad</p>
                         <div>
                             <apexcharts height="450" type="bar" :options="chartOptionsgInversionCity"
                                         :series="chartOptionsgInversionCity.series"></apexcharts>
@@ -130,7 +130,7 @@
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
-                        <p class="font-size-20 blue-grey-700">Evolutivo Inversion por Sector</p>
+                        <p class="font-size-20 blue-grey-700">Evolutivo Inversión por Sector</p>
                         <div>
                             <apexcharts height="600" type="bar" :options="chartOptionsgInversionSector"
                                         :series="chartOptionsgInversionSector.series"></apexcharts>
@@ -155,7 +155,7 @@
                     <div class="col-md-12 info-panel">
                         <br/>
                         <br/>
-                        <p class="font-size-20 blue-grey-700">Evolutivo Inversion por Marca</p>
+                        <p class="font-size-20 blue-grey-700">Evolutivo Inversión por Marca</p>
                         <div>
                             <apexcharts height="600" type="bar" :options="chartOptionsEvolutivoInvMarca"
                                         :series="chartOptionsEvolutivoInvMarca.series"></apexcharts>
@@ -208,6 +208,20 @@
                 years: '--',
                 brands: '--',
 
+                vallastotal: 0,
+                paraderostotal: 0,
+                sitmtotal: 0,
+                invtotal: 0,
+
+                chartTotalInvVallas: {
+                    series: []
+                },
+                chartTotalInvParaderos: {
+                    series: []
+                },
+                chartTotalInvSitm: {
+                    series: []
+                },
                 chartTotalInv: {
                     series: []
                 },
@@ -238,53 +252,11 @@
             }
         },
         methods: {
-            buildSparkLine() {
-                this.sparkLine1 = {
-                    tooltip: {
-                        theme: 'dark'
-                    },
-                    chart: {
-                        type: 'area',
-                        height: 80,
-                        sparkline: {
-                            enabled: true
-                        },
-                    },
-                    stroke: {
-                        curve: 'straight'
-                    },
-                    fill: {
-                        opacity: 0.3,
-                        gradient: {
-                            enabled: false
-                        }
-                    },
-                    series: [{
-                        data: [83, 45, 54, 38, 56, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 98, 75, 32],
-                    }],
-                    yaxis: {
-                        min: 0
-                    },
-                    colors: ['#DCE6EC'],
-                    title: {
-                        offsetX: 0,
-                        style: {
-                            fontSize: '24px',
-                            cssClass: 'apexcharts-yaxis-title'
-                        }
-                    },
-                    subtitle: {
-                        offsetX: 0,
-                        style: {
-                            fontSize: '14px',
-                            cssClass: 'apexcharts-yaxis-title'
-                        }
-                    }
-                }
-            },
             runAllRequest() {
+                this.buildTotalInversionVallas();
+                this.buildTotalInversionParaderos();
+                this.buildTotalInversionSitm();
                 this.buildTotalInversion();
-                this.buildSparkLine();
                 this.buildEvolutiveInvMonths();
                 this.buildInvSupportType();
                 this.buildEvolutiveInvBranSupport();
@@ -294,6 +266,125 @@
                 this.buildEvolutiveInvBran();
             },
 
+            buildTotalInversionVallas() {
+                this.isActive = true
+                let self = this;
+                axios.get('/getTotalInversmentVallas?years=' + this.years
+                ).then(function (response) {
+                    var data = response.data;
+                    data.numericSeries.forEach(function (element) {
+                        self.vallastotal += element;
+                    });
+                    self.vallastotal = self.formatPrice(self.vallastotal);
+                    self.chartTotalInvVallas = {
+                        chart: {
+                            height: 100,
+                            type: 'bar'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                            }
+                        },
+                        series: [{
+                            data: data.numericSeries
+                        }],
+                        xaxis: {
+                            labels: {
+                                show: false
+                            },
+                            categories: data.numericCategories,
+                        },
+                        dataLabels: {
+                            enabled: false,
+                            offsetX: 0
+                        },
+                    }
+                    self.isActive = false
+                }).catch(function (error) {
+                    return error;
+                });
+            },
+            buildTotalInversionParaderos() {
+                this.isActive = true
+                let self = this;
+
+                axios.get('/getTotalInversmentParaderos?years=' + this.years
+                ).then(function (response) {
+                    var data = response.data;
+                    data.numericSeries.forEach(function (element) {
+                        self.paraderostotal += element;
+                    });
+                    self.paraderostotal = self.formatPrice(self.paraderostotal);
+                    self.chartTotalInvParaderos = {
+                        chart: {
+                            height: 100,
+                            type: 'bar'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                            }
+                        },
+                        series: [{
+                            data: data.numericSeries
+                        }],
+                        xaxis: {
+                            labels: {
+                                show: false
+                            },
+                            categories: data.numericCategories,
+                        },
+                        dataLabels: {
+                            enabled: false,
+                            offsetX: 0
+                        },
+                    }
+                    self.isActive = false
+                }).catch(function (error) {
+                    return error;
+                });
+            },
+            buildTotalInversionSitm() {
+                this.isActive = true
+                let self = this;
+
+                axios.get('/getTotalInversmentSitm?years=' + this.years
+                ).then(function (response) {
+                    var data = response.data;
+                    data.numericSeries.forEach(function (element) {
+                        self.sitmtotal += element;
+                    });
+                    self.sitmtotal = self.formatPrice(self.sitmtotal);
+                    self.chartTotalInvSitm = {
+                        chart: {
+                            height: 100,
+                            type: 'bar'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                            }
+                        },
+                        series: [{
+                            data: data.numericSeries
+                        }],
+                        xaxis: {
+                            labels: {
+                                show: false
+                            },
+                            categories: data.numericCategories,
+                        },
+                        dataLabels: {
+                            enabled: false,
+                            offsetX: 0
+                        },
+                    }
+                    self.isActive = false
+                }).catch(function (error) {
+                    return error;
+                });
+            },
             buildTotalInversion() {
                 this.isActive = true
                 let self = this;
@@ -301,6 +392,10 @@
                 axios.get('/getTotalInversment?years=' + this.years
                 ).then(function (response) {
                     var data = response.data;
+                    data.numericSeries.forEach(function (element) {
+                        self.invtotal += element;
+                    });
+                    self.invtotal = self.formatPrice(self.invtotal);
                     self.chartTotalInv = {
                         chart: {
                             height: 100,

@@ -53,11 +53,56 @@ public class DashboardController {
 
     @Autowired
     Brands brands;
-    
+
     @Autowired
     TotalInversment totalInversment;
-    
-      /**
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentVallas")
+    @ResponseBody
+    BaseResponse getTotalInversmentVallas(@RequestParam("years") String years) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, "--");
+        params.put("operationType", "TOTAL_VALLAS_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentParaderos")
+    @ResponseBody
+    BaseResponse getTotalInversmentParaderos(@RequestParam("years") String years) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, "--");
+        params.put("operationType", "TOTAL_PARDEROS_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentSitm")
+    @ResponseBody
+    BaseResponse getTotalInversmentSitm(@RequestParam("years") String years) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, "--");
+        params.put("operationType", "TOTAL_TRANSMILLENO_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
      * see GET_ALL_BRANDS
      *
      * @return
@@ -67,7 +112,8 @@ public class DashboardController {
     BaseResponse getTotalInversment(@RequestParam("years") String years) {
         Map<String, String> params = new LinkedHashMap<>();
         buildParams(params, years, "--");
-        
+        params.put("operationType", "TOTAL_INV");
+
         return totalInversment.genericQuery(params);
     }
 

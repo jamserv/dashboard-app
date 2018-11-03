@@ -5,7 +5,6 @@ import co.com.accionese.dashboard.api.GenericRequest;
 import co.com.accionese.dashboard.api.IBaseRequest;
 import co.com.accionese.dashboard.dto.EvolutiveInvestmentDto;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
-import co.com.accionese.dashboard.dto.apexcharts.Serie;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,8 +28,7 @@ public class TotalInversment extends BaseQueryBuilder implements IBaseRequest {
     }
 
     @Override
-    public void buildQuery(Map<String, String> params) throws Exception {
-        params.put("operationType", "TOTAL_INV");
+    public void buildQuery(Map<String, String> params) throws Exception {        
     }
 
     @Override
@@ -44,7 +42,7 @@ public class TotalInversment extends BaseQueryBuilder implements IBaseRequest {
             String key = content.getYear();
 
             if (values.containsKey(key)) {
-                Long value = values.get(key) + Long.parseLong(content.getCost());
+                Long value = (values.get(key) + Long.parseLong(content.getCost()));
                 values.put(key, value);
             } else {
                 Long value = Long.parseLong(content.getCost());
