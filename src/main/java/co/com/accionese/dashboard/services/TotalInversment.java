@@ -28,7 +28,8 @@ public class TotalInversment extends BaseQueryBuilder implements IBaseRequest {
     }
 
     @Override
-    public void buildQuery(Map<String, String> params) throws Exception {        
+    public void buildQuery(Map<String, String> params) throws Exception {
+        params.put("fl", "year,cost");
     }
 
     @Override
@@ -55,12 +56,12 @@ public class TotalInversment extends BaseQueryBuilder implements IBaseRequest {
         baseResponse.setNumericCategories(categories);
         baseResponse.setNumericSeries(series);
     }
-    
+
     private List<Long> buildNumericSerie(Map<String, Long> values) {
         List<Long> response = new ArrayList<>();
-        for (Map.Entry<String, Long> entry : values.entrySet()) {            
+        for (Map.Entry<String, Long> entry : values.entrySet()) {
             Long value = entry.getValue();
-            
+
             response.add(value);
         }
         return response;

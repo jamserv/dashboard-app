@@ -52,7 +52,7 @@ public class Brands {
     private UriComponents buildRequestParams(Map<String, String> params, UriComponentsBuilder builder) throws Exception {
         String operationType = params.get("operationType");
 
-        String query = operationType + "&rows=2000&start=1";
+        String query = operationType + "&rows=200&start=0";
 
         builder = builder.path("/solr/dashboard-core/select?q=operationType:" + query);
 

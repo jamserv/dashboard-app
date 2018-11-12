@@ -15,6 +15,7 @@ co/com/accionese/dashboard/services/InvestmentByMonths.class
 co/com/accionese/dashboard/services/InvestmentBranBySupportType.class
 co/com/accionese/dashboard/dto/apexcharts/Serie.class
 co/com/accionese/dashboard/api/BaseQueryBuilder.class
+co/com/accionese/dashboard/services/Cities.class
 co/com/accionese/dashboard/dto/apexcharts/SerieSimple.class
 co/com/accionese/dashboard/dto/KeyValueObject.class
 co/com/accionese/dashboard/api/Constants.class

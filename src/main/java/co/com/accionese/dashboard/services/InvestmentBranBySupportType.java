@@ -25,42 +25,84 @@ public class InvestmentBranBySupportType extends BaseQueryBuilder implements IBa
 
     @Override
     public BaseResponse genericQuery(Map<String, String> params) {
-       return super.genericQuery(this, params);
+        return super.genericQuery(this, params);
     }
 
     @Override
     public void buildQuery(Map<String, String> params) throws Exception {
         params.put("operationType", "EVO_INV_BRAND_SUPPORT_TYPE");
+        params.put("fl", "type,brand,year,cost");
     }
 
     @Override
     public void buildResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
         List<String> categories = new ArrayList<>();
 
-        Map<String, List<Long>> values = new LinkedHashMap<>();
+        Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
+        Map<String, String> seriesMapFix = new LinkedHashMap<>();
+        Map<String, String> allMap = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = genericRequest.get(params);
         for (EvolutiveInvestmentDto content : list) {
+            existValue(allMap, content);
+
+            String cat = content.getBrand() + " " + content.getYear();
+            buildCategories(categories, cat);
+
             String key = content.getType();
-            Long cost = Long.parseLong(content.getCost());
+            seriesMapFix.put(key + " " + content.getBrand() + " " + content.getYear(), key);
+        }
 
-            if (values.containsKey(key)) {
-                List<Long> l = values.get(key);
+        for (Map.Entry<String, String> entry : allMap.entrySet()) {
+            String key = entry.getKey();
+            Long value = Long.parseLong(entry.getValue());
 
-                l.add(cost);
-                values.put(key, l);
+            String brand = key.split("-")[0];
+
+            if (seriesMap.containsKey(brand)) {
+                List<Long> l = seriesMap.get(brand);
+                l.add(value);
+                seriesMap.put(brand, l);
             } else {
                 List<Long> v = new ArrayList<>();
-                v.add(cost);
-                values.put(key, v);
+                v.add(value);
+                seriesMap.put(brand, v);
             }
-            buildCategories(categories, content.getBrand() + " " + content.getYear());
+
         }
-        List<Serie> r = buildSeriesWithMap(values);
+        fixNullableIndex(categories, seriesMapFix, seriesMap);
+
+        List<Serie> series = buildSeriesWithMap(seriesMap);
 
         baseResponse.setCategories(categories);
-        baseResponse.setSeries(r);
+        baseResponse.setSeries(series);
 
+    }
+
+    private void existValue(Map<String, String> allMap, EvolutiveInvestmentDto content) {
+        String key = content.getType() + "-" + content.getBrand() + content.getYear();
+        if (allMap.containsKey(key)) {
+            Long val = Long.parseLong(allMap.get(key)) + Long.parseLong(content.getCost());
+            allMap.put(key, String.valueOf(val));
+        } else {
+            allMap.put(key, content.getCost());
+        }
+    }
+
+    private void fixNullableIndex(List<String> categories, Map<String, String> seriesMapFix, Map<String, List<Long>> seriesMap) {
+        int counter = 0;
+        for (String category : categories) {
+            for (Map.Entry<String, List<Long>> entry : seriesMap.entrySet()) {
+                String key = entry.getKey();
+                List<Long> value = entry.getValue();
+
+                if (!seriesMapFix.containsKey(key + " " + category)) {
+                    value.add(counter, 0L);
+                    seriesMap.put(key, value);
+                }
+            }
+            counter++;
+        }
     }
 
     private void buildCategories(List<String> categories, String city) {

@@ -15,6 +15,7 @@
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/api/BaseQueryBuilder.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentByMonths.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentAnualByBrand.java
+/home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/Cities.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/TotalInversment.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/services/InvestmentBranBySupportType.java
 /home/janez/Documents/JUAN/workspace/dashboard/dashboard-app/src/main/java/co/com/accionese/dashboard/controllers/DashboardController.java

@@ -4,6 +4,7 @@ import co.com.accionese.dashboard.api.Constants;
 import co.com.accionese.dashboard.dto.KeyValueObject;
 import co.com.accionese.dashboard.dto.apexcharts.BaseResponse;
 import co.com.accionese.dashboard.services.Brands;
+import co.com.accionese.dashboard.services.Cities;
 import co.com.accionese.dashboard.services.InvestmentAnualByBrand;
 import co.com.accionese.dashboard.services.InvestmentByMonths;
 import co.com.accionese.dashboard.services.InvestmentBranBySupportType;
@@ -55,67 +56,10 @@ public class DashboardController {
     Brands brands;
 
     @Autowired
+    Cities cities;
+
+    @Autowired
     TotalInversment totalInversment;
-
-    /**
-     * see GET_ALL_BRANDS
-     *
-     * @return
-     */
-    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentVallas")
-    @ResponseBody
-    BaseResponse getTotalInversmentVallas(@RequestParam("years") String years) {
-        Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
-        params.put("operationType", "TOTAL_VALLAS_INV");
-
-        return totalInversment.genericQuery(params);
-    }
-
-    /**
-     * see GET_ALL_BRANDS
-     *
-     * @return
-     */
-    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentParaderos")
-    @ResponseBody
-    BaseResponse getTotalInversmentParaderos(@RequestParam("years") String years) {
-        Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
-        params.put("operationType", "TOTAL_PARDEROS_INV");
-
-        return totalInversment.genericQuery(params);
-    }
-
-    /**
-     * see GET_ALL_BRANDS
-     *
-     * @return
-     */
-    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentSitm")
-    @ResponseBody
-    BaseResponse getTotalInversmentSitm(@RequestParam("years") String years) {
-        Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
-        params.put("operationType", "TOTAL_TRANSMILLENO_INV");
-
-        return totalInversment.genericQuery(params);
-    }
-
-    /**
-     * see GET_ALL_BRANDS
-     *
-     * @return
-     */
-    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversment")
-    @ResponseBody
-    BaseResponse getTotalInversment(@RequestParam("years") String years) {
-        Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
-        params.put("operationType", "TOTAL_INV");
-
-        return totalInversment.genericQuery(params);
-    }
 
     /**
      * see GET_ALL_BRANDS
@@ -130,6 +74,78 @@ public class DashboardController {
     }
 
     /**
+     * see QUERY_CITIES
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getCities")
+    @ResponseBody
+    List<KeyValueObject> getCities() {
+        Map<String, String> params = new LinkedHashMap<>();
+        return cities.get(params);
+    }
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentVallas")
+    @ResponseBody
+    BaseResponse getTotalInversmentVallas(@RequestParam("years") String years, @RequestParam("months") String months, @RequestParam("cities") String cities, @RequestParam("brands") String brands) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, months, cities, brands, "--");
+        params.put("operationType", "TOTAL_VALLAS_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentParaderos")
+    @ResponseBody
+    BaseResponse getTotalInversmentParaderos(@RequestParam("years") String years, @RequestParam("months") String months, @RequestParam("cities") String cities, @RequestParam("brands") String brands) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, months, cities, brands, "--");
+        params.put("operationType", "TOTAL_PARDEROS_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversmentSitm")
+    @ResponseBody
+    BaseResponse getTotalInversmentSitm(@RequestParam("years") String years, @RequestParam("months") String months, @RequestParam("cities") String cities, @RequestParam("brands") String brands) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, months, cities, brands, "--");
+        params.put("operationType", "TOTAL_TRANSMILLENO_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
+     * see GET_ALL_BRANDS
+     *
+     * @return
+     */
+    @GetMapping(Constants.DASHBOARD_URI + "/getTotalInversment")
+    @ResponseBody
+    BaseResponse getTotalInversment(@RequestParam("years") String years, @RequestParam("months") String months, @RequestParam("cities") String cities, @RequestParam("brands") String brands) {
+        Map<String, String> params = new LinkedHashMap<>();
+        buildParams(params, years, months, cities, brands, "--");
+        params.put("operationType", "TOTAL_INV");
+
+        return totalInversment.genericQuery(params);
+    }
+
+    /**
      * see INV_ANUAL_TYPE
      *
      * @param years
@@ -138,9 +154,14 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvMonths")
     @ResponseBody
-    BaseResponse getEvolutiveInvMonths(@RequestParam("years") String years, @RequestParam("brands") String brands) {
+    BaseResponse getEvolutiveInvMonths(
+            @RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("brands") String brands,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, brands);
+        buildParams(params, years, months, cities, brands, types);
 
         return inversionMonths.genericQuery(params);
     }
@@ -153,9 +174,13 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getInvBySupportType")
     @ResponseBody
-    BaseResponse getInvBySupportType(@RequestParam("years") String years) {
+    BaseResponse getInvBySupportType(@RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("brands") String brands,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
+        buildParams(params, years, months, cities, brands, types);
 
         return invertionBySupportType.genericQuery(params);
     }
@@ -169,9 +194,14 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvertionBranBySupportTypeService")
     @ResponseBody
-    BaseResponse getEvolutiveInvestmentBranBySupportTypeService(@RequestParam("years") String years, @RequestParam("brands") String brands) {
+    BaseResponse getEvolutiveInvestmentBranBySupportTypeService(
+            @RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("brands") String brands,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, brands);
+        buildParams(params, years, months, cities, brands, types);
 
         return invertionBranBySupportType.genericQuery(params);
     }
@@ -184,9 +214,12 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByCity")
     @ResponseBody
-    BaseResponse getInvestmentByCity(@RequestParam("years") String years) {
+    BaseResponse getInvestmentByCity(@RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
+        buildParams(params, years, months, cities, "--", types);
 
         return investmentByCity.genericQuery(params);
     }
@@ -199,9 +232,14 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveInvestmentSector")
     @ResponseBody
-    BaseResponse getEvolutiveInvestmentSetor(@RequestParam("years") String years) {
+    BaseResponse getEvolutiveInvestmentSetor(
+            @RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("brands") String brands,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, "--");
+        buildParams(params, years, months, cities, brands, types);
 
         return investmentBySector.genericQuery(params);
     }
@@ -215,9 +253,14 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getInvestmentByTopCampaign")
     @ResponseBody
-    BaseResponse getInvestmentByTopCampaign(@RequestParam("years") String years, @RequestParam("brands") String brands) {
+    BaseResponse getInvestmentByTopCampaign(
+            @RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("brands") String brands,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, brands);
+        buildParams(params, years, months, cities, brands, types);
 
         return investmentByTopCampaign.genericQuery(params);
     }
@@ -231,24 +274,48 @@ public class DashboardController {
      */
     @GetMapping(Constants.DASHBOARD_URI + "/getEvolutiveBrandAnnualInvestment")
     @ResponseBody
-    BaseResponse getEvolutiveBrandAnnualInvestment(@RequestParam("years") String years, @RequestParam("brands") String brands) {
+    BaseResponse getEvolutiveBrandAnnualInvestment(
+            @RequestParam("years") String years,
+            @RequestParam("months") String months,
+            @RequestParam("cities") String cities,
+            @RequestParam("brands") String brands,
+            @RequestParam("types") String types) {
         Map<String, String> params = new LinkedHashMap<>();
-        buildParams(params, years, brands);
+        buildParams(params, years, months, cities, brands, types);
 
         return brandAnnualInvestment.genericQuery(params);
     }
 
-    private void buildParams(Map<String, String> params, String years, String brands) {
+    private void buildParams(Map<String, String> params, String years, String months, String cities, String brands, String types) {
         StringBuilder builder = new StringBuilder();
 
         if (!years.isEmpty()) {
             if (!years.equalsIgnoreCase("--")) {
-                builder.append(" AND year:" + years);
+                builder.append(" AND year:(" + years);
+                builder.append(")");
+            }
+        }
+        if (!months.isEmpty()) {
+            if (!months.equalsIgnoreCase("--")) {
+                builder.append(" AND month:(" + months);
+                builder.append(")");
+            }
+        }
+        if (!cities.isEmpty()) {
+            if (!cities.equalsIgnoreCase("--")) {
+                builder.append(" AND city:(" + cities);
+                builder.append(")");
             }
         }
         if (!brands.isEmpty()) {
             if (!brands.equalsIgnoreCase("--")) {
                 builder.append(" AND brand:(" + brands);
+                builder.append(")");
+            }
+        }
+        if (!types.isEmpty()) {
+            if (!types.equalsIgnoreCase("--")) {
+                builder.append(" AND type:(" + types);
                 builder.append(")");
             }
         }

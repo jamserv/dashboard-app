@@ -50,11 +50,17 @@ public class GenericRequest {
 
     private UriComponents buildRequestParams(Map<String, String> params, UriComponentsBuilder builder) throws Exception {
         String operationType = params.get("operationType");
+        String fl = params.get("fl");
         String where = buildWhere(params);
+        
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append(operationType);
+        queryBuilder.append(where);
+        queryBuilder.append("&fl=");
+        queryBuilder.append(fl);        
+        queryBuilder.append("&rows=1000000&start=0");    
 
-        String query = operationType + where + "&rows=2000&start=0";
-
-        builder = builder.path("/solr/dashboard-core/select?q=operationType:" + query);
+        builder = builder.path("/solr/dashboard-core/select?q=operationType:" + queryBuilder.toString());
 
         return builder.build();
     }

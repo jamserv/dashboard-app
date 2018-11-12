@@ -31,6 +31,7 @@ public class InvestmentAnualByBrand extends BaseQueryBuilder implements IBaseReq
     @Override
     public void buildQuery(Map<String, String> params) throws Exception {
         params.put("operationType", "EV_INV_BRAND");
+        params.put("fl", "brand,year,month,cost");
     }
 
     @Override
@@ -39,25 +40,36 @@ public class InvestmentAnualByBrand extends BaseQueryBuilder implements IBaseReq
 
         Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
         Map<String, String> seriesMapFix = new LinkedHashMap<>();
+        Map<String, String> allMap = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = genericRequest.get(params);
         for (EvolutiveInvestmentDto content : list) {
+
+            existValue(allMap, content);
+
             String cat = content.getMonth().substring(0, 3) + " " + content.getYear();
             buildCategories(categories, cat);
 
-            String key = content.getBrand().replaceAll(" ", "");
+            String key = content.getBrand();
 
-            if (seriesMap.containsKey(key)) {
-                List<Long> l = seriesMap.get(key);
-                long value = Long.parseLong(content.getCost());
+            seriesMapFix.put(key + " " + cat, key);
+        }
+
+        for (Map.Entry<String, String> entry : allMap.entrySet()) {
+            String key = entry.getKey();
+            Long value = Long.parseLong(entry.getValue());
+
+            String brand = key.split("-")[0];
+
+            if (seriesMap.containsKey(brand)) {
+                List<Long> l = seriesMap.get(brand);                
                 l.add(value);
-                seriesMap.put(key, l);
+                seriesMap.put(brand, l);
             } else {
                 List<Long> v = new ArrayList<>();
-                v.add(Long.parseLong(content.getCost()));
-                seriesMap.put(key, v);
+                v.add(value);
+                seriesMap.put(brand, v);
             }
-            seriesMapFix.put(key.replaceAll(" ", "") + " " + cat, key);
         }
 
         fixNullableIndex(categories, seriesMapFix, seriesMap);
@@ -65,6 +77,16 @@ public class InvestmentAnualByBrand extends BaseQueryBuilder implements IBaseReq
         List<Serie> series = buildSeriesWithMap(seriesMap);
         baseResponse.setCategories(categories);
         baseResponse.setSeries(series);
+    }
+
+    private void existValue(Map<String, String> allMap, EvolutiveInvestmentDto content) {
+        String key = content.getBrand() + "-" + content.getMonth() + content.getYear();
+        if (allMap.containsKey(key)) {
+            Long val = Long.parseLong(allMap.get(key)) + Long.parseLong(content.getCost());
+            allMap.put(key, String.valueOf(val));
+        } else {
+            allMap.put(key, content.getCost());
+        }
     }
 
     private void buildCategories(List<String> categories, String city) {
@@ -79,9 +101,9 @@ public class InvestmentAnualByBrand extends BaseQueryBuilder implements IBaseReq
             for (Map.Entry<String, List<Long>> entry : seriesMap.entrySet()) {
                 String key = entry.getKey();
                 List<Long> value = entry.getValue();
-                String brand = key.replaceAll(" ", "");
+                //String brand = key.replaceAll(" ", "");
 
-                if (!seriesMapFix.containsKey(brand + " " + category)) {
+                if (!seriesMapFix.containsKey(key + " " + category)) {
                     value.add(counter, 0L);
                     seriesMap.put(key, value);
                 }

@@ -83,10 +83,10 @@
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversión Mensual</p>
-                        <divrea>
+                        <div>
                             <apexcharts height="350" type="area" :options="chartOptionsg1"
                                         :series="chartOptionsg1.series"></apexcharts>
-                        </divrea>
+                        </div>
                     </div>
                 </div>
 
@@ -107,8 +107,14 @@
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversión Marca por Tipo Soporte</p>
+
+                        <button type="button" @click="changeStatusGraph('graph1')" class="btn btn-outline btn-default">
+                            Ver
+                            esta Gráfica
+                        </button>
+
                         <div>
-                            <apexcharts height="500" type="bar" :options="chartOptionsg3"
+                            <apexcharts v-if="vg1" height="500" type="bar" :options="chartOptionsg3"
                                         :series="chartOptionsg3.series"></apexcharts>
                         </div>
                     </div>
@@ -119,8 +125,12 @@
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Inversión por Ciudad</p>
+                        <button type="button" @click="changeStatusGraph('graph2')" class="btn btn-outline btn-default">
+                            Ver
+                            esta Gráfica
+                        </button>
                         <div>
-                            <apexcharts height="450" type="bar" :options="chartOptionsgInversionCity"
+                            <apexcharts v-if="vg2" height="450" type="bar" :options="chartOptionsgInversionCity"
                                         :series="chartOptionsgInversionCity.series"></apexcharts>
                         </div>
                     </div>
@@ -131,8 +141,12 @@
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversión por Sector</p>
+                        <button type="button" @click="changeStatusGraph('graph3')" class="btn btn-outline btn-default">
+                            Ver
+                            esta Gráfica
+                        </button>
                         <div>
-                            <apexcharts height="600" type="bar" :options="chartOptionsgInversionSector"
+                            <apexcharts v-if="vg3" height="600" type="bar" :options="chartOptionsgInversionSector"
                                         :series="chartOptionsgInversionSector.series"></apexcharts>
                         </div>
                     </div>
@@ -144,8 +158,12 @@
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">TOP Campañas</p>
+                        <button type="button" @click="changeStatusGraph('graph4')" class="btn btn-outline btn-default">
+                            Ver
+                            esta Gráfica
+                        </button>
                         <div>
-                            <apexcharts height="450" type="line" :options="chartOptionsTopCampanas"
+                            <apexcharts v-if="vg4" height="450" type="line" :options="chartOptionsTopCampanas"
                                         :series="chartOptionsTopCampanas.series"></apexcharts>
                         </div>
                     </div>
@@ -156,12 +174,17 @@
                         <br/>
                         <br/>
                         <p class="font-size-20 blue-grey-700">Evolutivo Inversión por Marca</p>
+                        <button type="button" @click="changeStatusGraph('graph5')" class="btn btn-outline btn-default">
+                            Ver
+                            esta Gráfica
+                        </button>
                         <div>
-                            <apexcharts height="600" type="bar" :options="chartOptionsEvolutivoInvMarca"
+                            <apexcharts v-if="vg5" height="600" type="bar" :options="chartOptionsEvolutivoInvMarca"
                                         :series="chartOptionsEvolutivoInvMarca.series"></apexcharts>
                         </div>
                     </div>
                 </div>
+
 
                 <vue-element-loading :active="isActive" :is-full-screen="true"/>
 
@@ -176,7 +199,8 @@
     import VueElementLoading from 'vue-element-loading'
     import {bus} from '../main';
 
-    axios.defaults.baseURL = 'http://104.237.159.49:9898/api/dashboard';
+    //axios.defaults.baseURL = 'http://104.237.159.49:9898/api/dashboard';
+    axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
 
     export default {
         components: {
@@ -187,13 +211,52 @@
             let self = this;
             bus.$on('updateParams', (filter) => {
                 this.brands = '';
-                this.years = filter.year;
+                this.years = '';
+                this.months = '';
+                this.cities = '';
+                this.types = '';
                 var count = 0;
                 filter.brands.forEach(function (element) {
                     if (count > 0) {
                         self.brands += ' OR ' + element;
                     } else {
                         self.brands += element;
+                    }
+                    count++;
+                });
+                count = 0;
+                filter.years.forEach(function (element) {
+                    if (count > 0) {
+                        self.years += ' OR ' + element;
+                    } else {
+                        self.years += element;
+                    }
+                    count++;
+                });
+                count = 0;
+                filter.months.forEach(function (element) {
+                    if (count > 0) {
+                        self.months += ' OR ' + element;
+                    } else {
+                        self.months += element;
+                    }
+                    count++;
+                });
+                count = 0;
+                filter.cities.forEach(function (element) {
+                    if (count > 0) {
+                        self.cities += ' OR ' + element;
+                    } else {
+                        self.cities += element;
+                    }
+                    count++;
+                });
+                count = 0;
+                filter.types.forEach(function (element) {
+                    if (count > 0) {
+                        self.types += ' OR ' + element;
+                    } else {
+                        self.types += element;
                     }
                     count++;
                 });
@@ -204,9 +267,19 @@
         },
         data() {
             return {
+                vg1: false,
+                vg2: false,
+                vg3: false,
+                vg4: false,
+                vg5: false,
+
                 isActive: true,
+
+                months: '--',
                 years: '--',
+                cities: '--',
                 brands: '--',
+                types: '--',
 
                 vallastotal: 0,
                 paraderostotal: 0,
@@ -226,52 +299,104 @@
                     series: []
                 },
                 sparkLine1: {
-                    series: null
+                    series: []
                 },
                 chartOptionsg1: {
-                    series: null
+                    series: []
                 },
                 chartOptionsg2: {
-                    series: null
+                    series: []
                 },
                 chartOptionsg3: {
-                    series: null
+                    series: []
                 },
                 chartOptionsgInversionCity: {
-                    series: null
+                    series: []
                 },
                 chartOptionsgInversionSector: {
-                    series: null
+                    series: []
                 },
                 chartOptionsTopCampanas: {
-                    series: null
+                    series: []
                 },
                 chartOptionsEvolutivoInvMarca: {
-                    series: null
+                    series: []
                 }
             }
         },
         methods: {
+            changeStatusGraph(graphic) {
+                switch (graphic) {
+                    case 'graph1':
+                        if (this.vg1) {
+                            this.vg1 = false;
+                        } else {
+                            this.vg1 = true;
+                            //this.buildEvolutiveInvBranSupport();
+                        }
+                        break;
+                    case 'graph2':
+                        if (this.vg2) {
+                            this.vg2 = false;
+                        } else {
+                            this.vg2 = true;
+                            //this.buildByInvCity();
+                        }
+                        break;
+                    case 'graph3':
+                        if (this.vg3) {
+                            this.vg3 = false;
+                        } else {
+                            this.vg3 = true;
+                            //this.buildInvSector();
+                        }
+                        break;
+                    case 'graph4':
+                        if (this.vg4) {
+                            this.vg4 = false;
+                        } else {
+                            this.vg4 = true;
+                            //this.buildTopCampanas();
+                        }
+                        break;
+                    case 'graph5':
+                        if (this.vg5) {
+                            this.vg5 = false;
+                        } else {
+                            this.vg5 = true;
+                            //this.buildEvolutiveInvBran();
+                        }
+                        break;
+                }
+            },
             runAllRequest() {
                 this.buildTotalInversionVallas();
                 this.buildTotalInversionParaderos();
                 this.buildTotalInversionSitm();
                 this.buildTotalInversion();
+
                 this.buildEvolutiveInvMonths();
                 this.buildInvSupportType();
+
                 this.buildEvolutiveInvBranSupport();
                 this.buildByInvCity();
                 this.buildInvSector();
                 this.buildTopCampanas();
                 this.buildEvolutiveInvBran();
+
             },
 
             buildTotalInversionVallas() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getTotalInversmentVallas?years=' + this.years
+                axios.get('/getTotalInversmentVallas' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
                 ).then(function (response) {
                     var data = response.data;
+                    self.vallastotal = 0;
                     data.numericSeries.forEach(function (element) {
                         self.vallastotal += element;
                     });
@@ -299,6 +424,14 @@
                             enabled: false,
                             offsetX: 0
                         },
+                        tooltip: {
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return '$' + self.formatPrice(val);
+                                }
+                            }
+                        }
                     }
                     self.isActive = false
                 }).catch(function (error) {
@@ -309,9 +442,14 @@
                 this.isActive = true
                 let self = this;
 
-                axios.get('/getTotalInversmentParaderos?years=' + this.years
+                axios.get('/getTotalInversmentParaderos' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
                 ).then(function (response) {
                     var data = response.data;
+                    self.paraderostotal = 0;
                     data.numericSeries.forEach(function (element) {
                         self.paraderostotal += element;
                     });
@@ -339,6 +477,14 @@
                             enabled: false,
                             offsetX: 0
                         },
+                        tooltip: {
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return '$' + self.formatPrice(val);
+                                }
+                            }
+                        }
                     }
                     self.isActive = false
                 }).catch(function (error) {
@@ -348,10 +494,14 @@
             buildTotalInversionSitm() {
                 this.isActive = true
                 let self = this;
-
-                axios.get('/getTotalInversmentSitm?years=' + this.years
+                axios.get('/getTotalInversmentSitm' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
                 ).then(function (response) {
                     var data = response.data;
+                    self.sitmtotal = 0;
                     data.numericSeries.forEach(function (element) {
                         self.sitmtotal += element;
                     });
@@ -379,6 +529,14 @@
                             enabled: false,
                             offsetX: 0
                         },
+                        tooltip: {
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return '$' + self.formatPrice(val);
+                                }
+                            }
+                        }
                     }
                     self.isActive = false
                 }).catch(function (error) {
@@ -389,9 +547,14 @@
                 this.isActive = true
                 let self = this;
 
-                axios.get('/getTotalInversment?years=' + this.years
+                axios.get('/getTotalInversment' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
                 ).then(function (response) {
                     var data = response.data;
+                    self.invtotal = 0;
                     data.numericSeries.forEach(function (element) {
                         self.invtotal += element;
                     });
@@ -419,6 +582,14 @@
                             enabled: false,
                             offsetX: 0
                         },
+                        tooltip: {
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return '$' + self.formatPrice(val);
+                                }
+                            }
+                        }
                     }
                     self.isActive = false
                 }).catch(function (error) {
@@ -430,29 +601,23 @@
                 this.isActive = true
                 let self = this;
 
-                axios.get('/getEvolutiveInvMonths?years=' + this.years + '&brands=' + this.brands
+                axios.get('/getEvolutiveInvMonths' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
+                    + '&types=' + this.types
                 ).then(function (response) {
                     var data = response.data;
                     self.chartOptionsg1 = {
                         chart: {
                             type: 'area',
                             toolbar: {
-                                show: true,
-                                tools: {
-                                    download: false,
-                                    selection: false,
-                                    zoom: false,
-                                    zoomin: false,
-                                    zoomout: false,
-                                    pan: false,
-                                    reset: false
-                                },
-                                autoSelected: 'zoom'
+                                show: false
                             },
                         },
                         dataLabels: {
-                            enabled: false,
-                            offsetX: 0
+                            enabled: false
                         },
                         stroke: {
                             curve: 'smooth',
@@ -469,7 +634,7 @@
                             theme: 'dark',
                             y: {
                                 formatter: function (val) {
-                                    return self.formatPrice(val);
+                                    return '$' + self.formatPrice(val);
                                 }
                             }
                         }
@@ -482,7 +647,12 @@
             buildInvSupportType() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvBySupportType?years=' + this.years).then(function (response) {
+                axios.get('/getInvBySupportType' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
+                    + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg2 = {
                         chart: {
@@ -514,14 +684,14 @@
                                 offsetX: 0,
                                 formatter: function (val) {
                                     return val.toFixed(0);
-                                },
+                                }
                             }
                         },
                         tooltip: {
                             theme: 'dark',
                             y: {
                                 formatter: function (val) {
-                                    return self.formatPrice(val);
+                                    return '$' + self.formatPrice(val);
                                 }
                             }
                         },
@@ -535,7 +705,12 @@
             buildEvolutiveInvBranSupport() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvertionBranBySupportTypeService?years=' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getEvolutiveInvertionBranBySupportTypeService' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
+                    + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg3 = {
                         chart: {
@@ -591,7 +766,11 @@
             buildByInvCity() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvestmentByCity?years=' + this.years).then(function (response) {
+                axios.get('/getInvestmentByCity' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsgInversionCity = {
                         chart: {
@@ -637,7 +816,7 @@
                             theme: 'dark',
                             y: {
                                 formatter: function (val) {
-                                    return self.formatPrice(val);
+                                    return '$' + self.formatPrice(val);
                                 }
                             }
                         },
@@ -651,7 +830,12 @@
             buildInvSector() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveInvestmentSector?years=' + this.years).then(function (response) {
+                axios.get('/getEvolutiveInvestmentSector' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
+                    + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsgInversionSector = {
                         chart: {
@@ -696,7 +880,12 @@
             buildTopCampanas() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getInvestmentByTopCampaign?years=' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getInvestmentByTopCampaign' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
+                    + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsTopCampanas = {
                         tooltip: {
@@ -749,7 +938,12 @@
             buildEvolutiveInvBran() {
                 this.isActive = true
                 let self = this;
-                axios.get('/getEvolutiveBrandAnnualInvestment?years=' + this.years + '&brands=' + this.brands).then(function (response) {
+                axios.get('/getEvolutiveBrandAnnualInvestment' +
+                    '?years=' + this.years
+                    + '&months=' + this.months
+                    + '&cities=' + this.cities
+                    + '&brands=' + this.brands
+                    + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsEvolutivoInvMarca = {
                         tooltip: {

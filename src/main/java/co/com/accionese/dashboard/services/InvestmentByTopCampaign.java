@@ -31,6 +31,7 @@ public class InvestmentByTopCampaign extends BaseQueryBuilder implements IBaseRe
     @Override
     public void buildQuery(Map<String, String> params) throws Exception {
         params.put("operationType", "TOP_CAMPANAS");
+        params.put("fl", "brand,year,month,cost");
     }
 
     public void buildResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
@@ -38,17 +39,20 @@ public class InvestmentByTopCampaign extends BaseQueryBuilder implements IBaseRe
         List<String> categories = new ArrayList<>();
 
         Map<String, Long> serieExistMap = new LinkedHashMap<>();
-
         Map<String, List<Long>> values = new LinkedHashMap<>();
+        Map<String, String> allMap = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = genericRequest.get(params);
         for (EvolutiveInvestmentDto content : list) {
+            existValue(allMap, content);
+
             String cat = content.getMonth().substring(0, 3) + " " + content.getYear();
             buildCategories(categories, cat);
 
             String key = content.getBrand();
             Long cost = Long.parseLong(content.getCost());
 
+            /*
             if (values.containsKey(key)) {
                 List<Long> l = values.get(key);
 
@@ -59,7 +63,26 @@ public class InvestmentByTopCampaign extends BaseQueryBuilder implements IBaseRe
                 v.add(cost);
                 values.put(key, v);
             }
+            */
             serieExistMap.put(key.replaceAll(" ", "") + " " + cat, cost);
+        }
+
+        for (Map.Entry<String, String> entry : allMap.entrySet()) {
+            String key = entry.getKey();
+            Long value = Long.parseLong(entry.getValue());
+
+            String brand = key.split("-")[0];
+
+            if (values.containsKey(brand)) {
+                List<Long> l = values.get(brand);
+                l.add(value);
+                values.put(brand, l);
+            } else {
+                List<Long> v = new ArrayList<>();
+                v.add(value);
+                values.put(brand, v);
+            }
+
         }
 
         fixNullableIndex(categories, serieExistMap, values);
@@ -68,6 +91,16 @@ public class InvestmentByTopCampaign extends BaseQueryBuilder implements IBaseRe
         baseResponse.setCategories(categories);
         baseResponse.setSeries(series);
 
+    }
+
+    private void existValue(Map<String, String> allMap, EvolutiveInvestmentDto content) {
+        String key = content.getBrand() + "-" + content.getMonth() + content.getYear();
+        if (allMap.containsKey(key)) {
+            Long val = Long.parseLong(allMap.get(key)) + Long.parseLong(content.getCost());
+            allMap.put(key, String.valueOf(val));
+        } else {
+            allMap.put(key, content.getCost());
+        }
     }
 
     private void fixNullableIndex(List<String> categories, Map<String, Long> serieExistMap, Map<String, List<Long>> seriesMap) {

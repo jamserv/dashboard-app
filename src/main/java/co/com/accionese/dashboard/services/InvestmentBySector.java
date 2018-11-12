@@ -31,34 +31,65 @@ public class InvestmentBySector extends BaseQueryBuilder implements IBaseRequest
     @Override
     public void buildQuery(Map<String, String> params) throws Exception {
         params.put("operationType", "INV_BY_SECTOR");
+        params.put("fl", "sector,year,month,cost");
     }
 
     @Override
     public void buildResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
         List<String> categories = new ArrayList<>();
         Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
+        Map<String, String> allMap = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = genericRequest.get(params);
         for (EvolutiveInvestmentDto content : list) {
+            existValue(allMap, content);
             buildCategories(categories, content.getMonth().substring(0, 3) + " " + content.getYear());
 
-            String key = content.getSector();
-            Long cost = Long.parseLong(content.getCost());
+//            String key = content.getSector();
+//            Long cost = Long.parseLong(content.getCost());
+//
+//            if (seriesMap.containsKey(key)) {
+//                List<Long> l = seriesMap.get(key);
+//                l.add(cost);
+//                seriesMap.put(key, l);
+//            } else {
+//                List<Long> v = new ArrayList<>();
+//                v.add(cost);
+//                seriesMap.put(key, v);
+//            }
+        }
 
-            if (seriesMap.containsKey(key)) {
-                List<Long> l = seriesMap.get(key);
-                l.add(cost);
-                seriesMap.put(key, l);
+        for (Map.Entry<String, String> entry : allMap.entrySet()) {
+            String key = entry.getKey();
+            Long value = Long.parseLong(entry.getValue());
+
+            String brand = key.split("-")[0];
+
+            if (seriesMap.containsKey(brand)) {
+                List<Long> l = seriesMap.get(brand);
+                l.add(value);
+                seriesMap.put(brand, l);
             } else {
                 List<Long> v = new ArrayList<>();
-                v.add(cost);
-                seriesMap.put(key, v);
+                v.add(value);
+                seriesMap.put(brand, v);
             }
+
         }
 
         List<Serie> series = buildSeriesWithMap(seriesMap);
         baseResponse.setCategories(categories);
         baseResponse.setSeries(series);
+    }
+
+    private void existValue(Map<String, String> allMap, EvolutiveInvestmentDto content) {
+        String key = content.getSector() + "-" + content.getMonth() + content.getYear();
+        if (allMap.containsKey(key)) {
+            Long val = Long.parseLong(allMap.get(key)) + Long.parseLong(content.getCost());
+            allMap.put(key, String.valueOf(val));
+        } else {
+            allMap.put(key, content.getCost());
+        }
     }
 
     private void buildCategories(List<String> categories, String city) {

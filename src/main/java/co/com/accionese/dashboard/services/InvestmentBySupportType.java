@@ -31,35 +31,54 @@ public class InvestmentBySupportType extends BaseQueryBuilder implements IBaseRe
     @Override
     public void buildQuery(Map<String, String> params) throws Exception {
         params.put("operationType", "INV_SUPPORT_TYPE");
+        params.put("fl", "type,year,cost");
     }
 
     @Override
     public void buildResponse(BaseResponse baseResponse, Map<String, String> params) throws Exception {
 
-        Map<String, List<Long>> values = new LinkedHashMap<>();
         List<Integer> categories = new ArrayList<>();
+        Map<String, List<Long>> seriesMap = new LinkedHashMap<>();
+        Map<String, String> allMap = new LinkedHashMap<>();
 
         List<EvolutiveInvestmentDto> list = genericRequest.get(params);
         for (EvolutiveInvestmentDto content : list) {
-            String key = content.getType();
 
-            if (values.containsKey(key)) {
-                List<Long> l = values.get(key);
-                long value = Long.parseLong(content.getCost());
-                l.add(value);
-                values.put(key, l);
-            } else {
-                List<Long> v = new ArrayList<>();
-                v.add(Long.parseLong(content.getCost()));
-                values.put(key, v);
-            }
+            existValue(allMap, content);
+
             buildCategories(categories, Integer.parseInt(content.getYear()));
         }
+        for (Map.Entry<String, String> entry : allMap.entrySet()) {
+            String key = entry.getKey();
+            Long value = Long.parseLong(entry.getValue());
 
-        List<Serie> r = buildSerieWithMap(values);
+            String brand = key.split("-")[0];
+
+            if (seriesMap.containsKey(brand)) {
+                List<Long> l = seriesMap.get(brand);
+                l.add(value);
+                seriesMap.put(brand, l);
+            } else {
+                List<Long> v = new ArrayList<>();
+                v.add(value);
+                seriesMap.put(brand, v);
+            }
+        }
+
+        List<Serie> r = buildSerieWithMap(seriesMap);
 
         baseResponse.setNumericCategories(categories);
         baseResponse.setSeries(r);
+    }
+
+    private void existValue(Map<String, String> allMap, EvolutiveInvestmentDto content) {
+        String key = content.getType() + "-" + content.getYear();
+        if (allMap.containsKey(key)) {
+            Long val = Long.parseLong(allMap.get(key)) + Long.parseLong(content.getCost());
+            allMap.put(key, String.valueOf(val));
+        } else {
+            allMap.put(key, content.getCost());
+        }
     }
 
     private void buildCategories(List<Integer> categories, Integer year) {
