@@ -96,7 +96,7 @@
                         <br/>
                         <p class="font-size-20 blue-grey-700">Inversión por Tipo de Soporte</p>
                         <div>
-                            <apexcharts height="350" type="bar" :options="chartOptionsg2"
+                            <apexcharts v-if="chartOptionsg2.series" height="350" type="bar" :options="chartOptionsg2"
                                         :series="chartOptionsg2.series"></apexcharts>
                         </div>
                     </div>
@@ -199,8 +199,8 @@
     import VueElementLoading from 'vue-element-loading'
     import {bus} from '../main';
 
-    //axios.defaults.baseURL = 'http://104.237.159.49:9898/api/dashboard';
-    axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
+    axios.defaults.baseURL = 'http://104.237.159.49:9898/api/dashboard';
+    //axios.defaults.baseURL = 'http://localhost:9898/api/dashboard';
 
     export default {
         components: {
@@ -305,7 +305,7 @@
                     series: []
                 },
                 chartOptionsg2: {
-                    series: []
+                    series: null
                 },
                 chartOptionsg3: {
                     series: []
@@ -655,6 +655,7 @@
                     + '&types=' + this.types).then(function (response) {
                     let data = response.data;
                     self.chartOptionsg2 = {
+                        series: data.series,
                         chart: {
                             type: 'bar',
                             stacked: true,
@@ -694,8 +695,7 @@
                                     return '$' + self.formatPrice(val);
                                 }
                             }
-                        },
-                        series: data.series
+                        }
                     }
                     self.isActive = false
                 }).catch(function (error) {

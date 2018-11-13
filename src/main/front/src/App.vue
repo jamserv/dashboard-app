@@ -74,35 +74,8 @@
                                         <i class="icon wb-settings" aria-hidden="true"></i>
                                     </a>
                                     <a href="javascript:void(0)" role="menuitem">
-                                        Todas las Notificaciones
+                                        Ver todas las Notificaciones
                                     </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#"
-                               aria-expanded="false"
-                               data-animation="scale-up" role="button">
-                                  <span class="avatar avatar-online">
-                                      <img src="global/portraits/5.png" alt="...">
-                                    <i></i>
-                                  </span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li role="presentation">
-                                    <a href="javascript:void(0)" role="menuitem"><i class="icon wb-user"
-                                                                                    aria-hidden="true"></i>
-                                        Perfil</a>
-                                </li>
-                                <li role="presentation">
-                                    <a href="javascript:void(0)" role="menuitem"><i class="icon wb-settings"
-                                                                                    aria-hidden="true"></i> Ajustes</a>
-                                </li>
-                                <li class="divider" role="presentation"></li>
-                                <li role="presentation">
-                                    <a href="javascript:void(0)" role="menuitem"><i class="icon wb-power"
-                                                                                    aria-hidden="true"></i> Cerrar
-                                        Sesion</a>
                                 </li>
                             </ul>
                         </li>
@@ -141,68 +114,61 @@
                             </li>
 
                         </ul>
+                        <ul class="site-menu">
+                            <li class="site-menu-category">Filtros</li>
+                        </ul>
+
                         <div class="site-menubar-section" v-if="hideMenu">
 
                             <h5>Mes</h5>
-                            <div class="form-group">
-
+                            <center>
                                 <multi-select v-model="month"
                                               searchPlaceholder="Buscar"
                                               :options="options"
                                               :btnLabel="btnLabel"
                                               :selectOptions="months"/>
-
-                            </div>
-
+                            </center>
                             <h5>Año</h5>
-                            <div class="form-group">
-
+                            <center>
                                 <multi-select v-model="year"
                                               searchPlaceholder="Buscar"
                                               :options="options"
                                               :btnLabel="btnLabel"
                                               :selectOptions="years"/>
-
-                            </div>
-
+                            </center>
                             <h5>Ciudad</h5>
-                            <div class="form-group">
+                            <center>
                                 <multi-select v-model="cities"
                                               search
                                               searchPlaceholder="Buscar"
                                               :options="options"
                                               :btnLabel="btnLabel"
                                               :selectOptions="allCities"/>
-                            </div>
-
+                            </center>
                             <h5>Marca</h5>
-                            <div class="form-group">
+                            <center>
                                 <multi-select v-model="brand"
                                               search
                                               searchPlaceholder="Buscar"
                                               :options="options"
                                               :btnLabel="btnLabel"
                                               :selectOptions="brands"/>
-                            </div>
-
+                            </center>
                             <h5>Tipo</h5>
-                            <div class="form-group">
+                            <center>
                                 <multi-select v-model="types"
                                               searchPlaceholder="Buscar"
                                               :options="options"
                                               :btnLabel="btnLabel"
                                               :selectOptions="alltypes"/>
-                            </div>
-
+                            </center>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <router-view></router-view>
     </div>
-
 </template>
 <script>
     import axios from 'axios'

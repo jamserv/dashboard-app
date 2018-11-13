@@ -44,19 +44,6 @@ public class InvestmentBySector extends BaseQueryBuilder implements IBaseRequest
         for (EvolutiveInvestmentDto content : list) {
             existValue(allMap, content);
             buildCategories(categories, content.getMonth().substring(0, 3) + " " + content.getYear());
-
-//            String key = content.getSector();
-//            Long cost = Long.parseLong(content.getCost());
-//
-//            if (seriesMap.containsKey(key)) {
-//                List<Long> l = seriesMap.get(key);
-//                l.add(cost);
-//                seriesMap.put(key, l);
-//            } else {
-//                List<Long> v = new ArrayList<>();
-//                v.add(cost);
-//                seriesMap.put(key, v);
-//            }
         }
 
         for (Map.Entry<String, String> entry : allMap.entrySet()) {
